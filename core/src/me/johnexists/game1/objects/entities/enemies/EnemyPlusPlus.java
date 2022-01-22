@@ -16,6 +16,11 @@ import me.johnexists.game1.objects.weapons.lasers.Laser;
 
 import java.util.Optional;
 
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line;
+import static java.util.Objects.nonNull;
+import static java.util.Optional.empty;
+
 /*
  * --- Enemy Plus Plus ---
  * Ability: A Step Above Default Enemies,
@@ -41,7 +46,7 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
         this.laser = new BasicLaser(this, getLocalPlayer(getLocation().getWorld()),
                 GeneratorConstants.values()[MathUtils.random(1, 5)]);
         laser.disable();
-        currentBullet = Optional.empty();
+        currentBullet = empty();
         enemyType = AGGRESSIVE_LAUNCH;
     }
 
@@ -54,14 +59,14 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
 
     @Override
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.begin(Line);
         {
             shapeRenderer.setColor(enemyColour);
             shapeRenderer.rect(location.getX(), location.getY(), size.getWidth(), size.getHeight());
         }
         shapeRenderer.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(Filled);
         {
             shapeRenderer.setColor(enemyColour);
             shapeRenderer.rect(location.getX() + GAP, location.getY() + GAP,
@@ -86,7 +91,7 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
     public void wipeBullet() {
         currentBullet.ifPresent(bulletPlusPlus ->
                 location.getWorld().despawn(bulletPlusPlus));
-        currentBullet = Optional.empty();
+        currentBullet = empty();
     }
 
     @Override
@@ -98,6 +103,7 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
     public void clearLaser() {
         laser = null;
     }
+
     private class BulletPlusPlus extends DamageableEntity {
 
         Player localPlayer;
@@ -111,26 +117,28 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
 
         @Override
         public void update(float deltaTime) {
-            Location distanceToPlayer = location.distanceTo(localPlayer);
-            Vector2 vectorToPlayer = new Vector2(distanceToPlayer.getX(), distanceToPlayer.getY());
-            vectorToPlayer.nor();
-            vectorToPlayer.x *= deltaTime * 200;
-            vectorToPlayer.y *= deltaTime * 200;
+            if (nonNull(localPlayer)) {
+                Location distanceToPlayer = location.distanceTo(localPlayer);
+                Vector2 vectorToPlayer = new Vector2(distanceToPlayer.getX(), distanceToPlayer.getY());
+                vectorToPlayer.nor();
+                vectorToPlayer.x *= deltaTime * 200;
+                vectorToPlayer.y *= deltaTime * 200;
 
-            location.add(vectorToPlayer.x, vectorToPlayer.y);
+                location.add(vectorToPlayer.x, vectorToPlayer.y);
 
-            collidesWith(localPlayer, () -> {
-                localPlayer.damage(75);
-                if(!localPlayer.isAlive()) {
-                    location.getWorld().despawn(localPlayer);
-                }
-                wipeBullet();
-            });
+                collidesWith(localPlayer, () -> {
+                    localPlayer.damage(75);
+                    if (!localPlayer.isAlive()) {
+                        location.getWorld().despawn(localPlayer);
+                    }
+                    wipeBullet();
+                });
+            }
         }
 
         @Override
         public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.begin(Filled);
             {
                 shapeRenderer.setColor(Color.GRAY);
                 shapeRenderer.rect(location.getX(), location.getY(),

@@ -58,9 +58,8 @@ public class HUDMinimap extends UIElement {
     }
 
     private Location clampPos(Location loc) {
-        Location location1=  new Location(MathUtils.clamp(loc.getX() * MAP_RATIO_X * getXSizeMultiplier(), 0, World.MAP_X),
+        return new Location(MathUtils.clamp(loc.getX() * MAP_RATIO_X * getXSizeMultiplier(), 0, World.MAP_X),
                 MathUtils.clamp(loc.getY() * MAP_RATIO_Y * getYSizeMultiplier(), 0, World.MAP_Y));
-        return location1;
     }
 
     @Override

@@ -28,6 +28,8 @@ public abstract class Enemy extends DamageableEntity implements AITaskHost {
         TARGET_DISTANCE = 1000;
         scalar = MathUtils.random(45,100);
 //        scalar = MathUtils.random(1,5);
+
+        health = MAX_OVERFLOW_HEALTH;
     }
 
     @Override

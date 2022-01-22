@@ -44,6 +44,8 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         this.laser = new MultipleLasers(this, Player.laserGenerator);
         this.scalar = playerScalar;
 
+//        health =  MAX_OVERFLOW_HEALTH;
+
         currentAbility = empty();
         viewingOrderWeight = 5;
 
