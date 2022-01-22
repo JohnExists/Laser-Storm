@@ -1,0 +1,98 @@
+package me.johnexists.game1.ui.hud;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import me.johnexists.game1.objects.attributes.Location;
+import me.johnexists.game1.objects.attributes.Size;
+import me.johnexists.game1.objects.GameObject;
+import me.johnexists.game1.objects.entities.DamageableEntity;
+import me.johnexists.game1.objects.entities.enemies.Enemy;
+import me.johnexists.game1.ui.UIElement;
+import me.johnexists.game1.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.badlogic.gdx.Gdx.gl;
+import static com.badlogic.gdx.Gdx.graphics;
+import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+
+@SuppressWarnings({
+        "MismatchedQueryAndUpdateOfCollection",
+        "FieldCanBeLocal"
+})
+public class HUDMinimap extends UIElement {
+
+    private final float MAP_SIZE = 96,
+            MAP_RATIO_X, MAP_RATIO_Y;
+    private final List<GameObject> objects;
+    private final List<Location> objectLocations;
+    private final World world;
+
+    public HUDMinimap(Location location, World world) {
+        super(location, new Size(0, 0));
+        this.size = new Size(MAP_SIZE, MAP_SIZE);
+        this.world = world;
+        objects = world.getGameObjects().stream()
+                .filter(gameObject -> gameObject instanceof DamageableEntity)
+                .collect(Collectors.toList());
+        objectLocations = new ArrayList<>();
+        objects.forEach(damageableEntity ->
+                objectLocations.add(new Location(0, 0)));
+
+        MAP_RATIO_X = MAP_SIZE / World.MAP_X;
+        MAP_RATIO_Y = MAP_SIZE / World.MAP_Y;
+    }
+
+    @Override
+    public void update(float deltaTime) {
+    }
+
+    private Location calculatePosRatioOf(GameObject gameObject) {
+        Location loc = gameObject.getLocation();
+        return clampPos(loc);
+    }
+
+    private Location clampPos(Location loc) {
+        Location location1=  new Location(MathUtils.clamp(loc.getX() * MAP_RATIO_X * getXSizeMultiplier(), 0, World.MAP_X),
+                MathUtils.clamp(loc.getY() * MAP_RATIO_Y * getYSizeMultiplier(), 0, World.MAP_Y));
+        return location1;
+    }
+
+    @Override
+    public void render() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        {
+            graphics.getGL20().glEnable(GL20.GL_BLEND);
+            gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.setColor(new Color(0,0,0,0.45f));
+            shapeRenderer.rect(location.getX(), location.getY(),
+                    size.getWidth(), size.getHeight());
+            renderPoints();
+        }
+        shapeRenderer.end();
+        gl.glDisable(GL20.GL_BLEND);
+    }
+
+    private void renderPoints() {
+        objects.forEach(ob -> {
+            if (((DamageableEntity) ob).isAlive()) {
+                Color color = ob instanceof Enemy ?
+                        ((Enemy) ob).getEnemyColour() :
+                        Color.RED;
+                float radius = ob.equals(world.getMainCharacter()) ?
+                        5f * getXSizeMultiplier() :
+                        2.5f * getXSizeMultiplier();
+
+                shapeRenderer.setColor(color);
+
+                shapeRenderer.circle(location.getX() + (calculatePosRatioOf(ob).getX()),
+                        location.getY() + (calculatePosRatioOf(ob).getY()), radius);
+            }
+        });
+    }
+}
