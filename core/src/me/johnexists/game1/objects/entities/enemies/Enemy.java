@@ -6,6 +6,7 @@ import me.johnexists.game1.objects.attributes.Location;
 import me.johnexists.game1.enemyai.AITask;
 import me.johnexists.game1.enemyai.AITaskHost;
 import me.johnexists.game1.enemyai.ai.StandStillAI;
+import me.johnexists.game1.objects.attributes.Size;
 import me.johnexists.game1.objects.entities.DamageableEntity;
 import me.johnexists.game1.objects.entities.Player;
 import me.johnexists.game1.world.World;
@@ -25,11 +26,12 @@ public abstract class Enemy extends DamageableEntity implements AITaskHost {
     public Enemy(Location location) {
         super(location);
         currentTask = new StandStillAI(this);
-        TARGET_DISTANCE = 1000;
-        scalar = MathUtils.random(45,100);
-//        scalar = MathUtils.random(1,5);
+        TARGET_DISTANCE = 450 * Size.getXSizeMultiplier();
+//        scalar = MathUtils.random(45,100);
+        scalar = MathUtils.random(1,5);
+        scalar = 1;
 
-        health = MAX_OVERFLOW_HEALTH;
+//        health = MAX_OVERFLOW_HEALTH;
     }
 
     @Override

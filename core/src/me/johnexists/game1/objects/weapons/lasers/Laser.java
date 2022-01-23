@@ -123,8 +123,8 @@ public abstract class Laser extends GameObject implements Collideable {
     }
 
     protected float calculateLineLength() {
-        return (float) Math.sqrt(Math.pow(loc2.getX() - loc1.getX(), 2) +
-                Math.pow(loc2.getY() - loc1.getY(), 2));
+        return (float) Math.min(Math.sqrt(Math.pow(loc2.getX() - loc1.getX(), 2) +
+                Math.pow(loc2.getY() - loc1.getY(), 2)), 750 * Size.getXSizeMultiplier());
     }
 
     @Override

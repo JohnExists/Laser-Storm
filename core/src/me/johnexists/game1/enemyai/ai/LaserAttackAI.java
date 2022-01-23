@@ -10,6 +10,7 @@ import me.johnexists.game1.objects.entities.DamageableEntity;
 import me.johnexists.game1.objects.entities.Player;
 import me.johnexists.game1.objects.weapons.lasers.Laser;
 
+import static java.lang.Math.abs;
 import static java.util.Objects.*;
 import static me.johnexists.game1.objects.entities.enemies.Enemy.*;
 
@@ -39,8 +40,9 @@ public class LaserAttackAI implements AITask {
         }
 
         if (nonNull(distanceToPlayer)) {
-            if (distanceToPlayer.isXGreaterThan(TARGET_DISTANCE) &&
-                    distanceToPlayer.isYGreaterThan(TARGET_DISTANCE)) {
+            System.out.println(distanceToPlayer);
+            if (abs(distanceToPlayer.getX()) > TARGET_DISTANCE ||
+                    abs(distanceToPlayer.getY()) > TARGET_DISTANCE) {
                 laser.disable();
                 taskHost.endTask(new AgroTargetAI(host, target,
                         new Size(MathUtils.random(100, 175), MathUtils.random(100, 175))));

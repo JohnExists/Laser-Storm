@@ -43,7 +43,7 @@ public class World {
         gameObjects = new ArrayList<>();
         activeParticles = new ArrayList<>();
         loadEntities();
-//        mainCharacter.setImmortal(true);
+        mainCharacter.setImmortal(true);
 //        spawn(new DefaultEnemy(new Location(player.getLocation().getX() + 2000 * Size.getXSizeMultiplier(),
 //                player.getLocation().getY() + 2000 * Size.getYSizeMultiplier(), this)));
 
@@ -58,14 +58,14 @@ public class World {
 //        player.setLocation(new Location(1500 * getXSizeMultiplier(), 1500 * getYSizeMultiplier(), this));
         mainCharacter = player;
         spawn(player);
-        for (int i = 0; i < 25; i++) {
+//        for (int i = 0; i < 25; i++) {
             spawn(new DefaultEnemy(getRandomLocation()));
-            spawn(new XEnemy(getRandomLocation()));
-            spawn(new EnemyPlusPlus(getRandomLocation()));
-        }
-        for (int i = 0; i < 6; i++) {
-            spawn(new EnemyHealer(getRandomLocation()));
-        }
+//            spawn(new XEnemy(getRandomLocation()));
+//            spawn(new EnemyPlusPlus(getRandomLocation()));
+//        }
+//        for (int i = 0; i < 6; i++) {
+//            spawn(new EnemyHealer(getRandomLocation()));
+//        }
     }
 
     public void update(float deltaTime) {

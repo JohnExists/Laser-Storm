@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import me.johnexists.game1.abilities.Ability;
 import me.johnexists.game1.abilities.Repulsor;
+import me.johnexists.game1.logic.GameLogic;
 import me.johnexists.game1.objects.attributes.CircleShape;
 import me.johnexists.game1.objects.attributes.LaserWielder;
 import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.logic.GameLogic;
 import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.objects.weapons.lasers.BasicLaser;
 import me.johnexists.game1.objects.weapons.lasers.Laser;
 import me.johnexists.game1.objects.weapons.lasers.LaserConstants;
-import me.johnexists.game1.objects.weapons.lasers.MultipleLasers;
 import me.johnexists.game1.state.State;
 
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
     public static LaserConstants laserSkin = LaserConstants.RAINBOW;
     public static GeneratorConstants laserGenerator = GeneratorConstants.MINI;
-    public static float playerScalar = 324, passiveHealPerSecond = 3.5f;
+    public static float playerScalar = 10, passiveHealPerSecond = 3.5f;
     public static int kills = 0;
 
     private final GameLogic gameLogic;
@@ -41,7 +41,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
     public Player(State state, Location location) {
         super(location);
         this.gameLogic = state.getGameLogic();
-        this.laser = new MultipleLasers(this, Player.laserGenerator);
+        this.laser = new BasicLaser(this, 0, Player.laserGenerator);
         this.scalar = playerScalar;
 
 //        health =  MAX_OVERFLOW_HEALTH;
