@@ -26,10 +26,9 @@ public abstract class Enemy extends DamageableEntity implements AITaskHost {
     public Enemy(Location location) {
         super(location);
         currentTask = new StandStillAI(this);
-        TARGET_DISTANCE = 450 * Size.getXSizeMultiplier();
+        TARGET_DISTANCE = 750 * Size.getXSizeMultiplier();
 //        scalar = MathUtils.random(45,100);
         scalar = MathUtils.random(1,5);
-        scalar = 1;
 
 //        health = MAX_OVERFLOW_HEALTH;
     }

@@ -1,6 +1,7 @@
 package me.johnexists.game1.abilities;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import me.johnexists.game1.objects.attributes.Location;
@@ -20,8 +21,7 @@ public class Repulsor extends Ability {
     }
 
     @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
+    public void whileActive(float deltaTime) {
         float radius = (75 + (STARTER_TICKS - ticksLeft) * 120) * Size.getXSizeMultiplier();
 
         player.getNearbyEntities(radius, radius)
@@ -47,7 +47,7 @@ public class Repulsor extends Ability {
     }
 
     @Override
-    public void render(ShapeRenderer shapeRenderer) {
+    public void render(ShapeRenderer shapeRenderer, SpriteBatch spriteBatch) {
         float radius = (75 + (STARTER_TICKS - ticksLeft) * 120) * Size.getXSizeMultiplier();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);

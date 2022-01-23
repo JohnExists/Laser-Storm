@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import me.johnexists.game1.abilities.Ability;
+import me.johnexists.game1.abilities.Deranger;
 import me.johnexists.game1.abilities.Repulsor;
 import me.johnexists.game1.logic.GameLogic;
 import me.johnexists.game1.objects.attributes.CircleShape;
@@ -51,7 +52,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
         gameLogic.getKeyInput().registerOnKeyReleased(Q, () -> {
             if (currentAbility.isEmpty()) {
-                currentAbility = of(new Repulsor(this));
+                currentAbility = of(new Deranger(this));
             }
         });
     }
@@ -110,13 +111,13 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
     @Override
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
 //        shapeRenderer.setProjectionMatrix(getLocation().getWorld().getGameState().getGameCamera().combined);
+        currentAbility.ifPresent(ability -> ability.render(shapeRenderer, spriteBatch));
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         {
             shapeRenderer.setColor(Color.BLUE);
             shapeRenderer.circle(location.getX(), location.getY(), RADIUS);
         }
         shapeRenderer.end();
-        currentAbility.ifPresent(ability -> ability.render(shapeRenderer));
 
     }
 

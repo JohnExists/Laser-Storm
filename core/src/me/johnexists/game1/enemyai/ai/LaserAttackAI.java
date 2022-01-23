@@ -40,7 +40,6 @@ public class LaserAttackAI implements AITask {
         }
 
         if (nonNull(distanceToPlayer)) {
-            System.out.println(distanceToPlayer);
             if (abs(distanceToPlayer.getX()) > TARGET_DISTANCE ||
                     abs(distanceToPlayer.getY()) > TARGET_DISTANCE) {
                 laser.disable();

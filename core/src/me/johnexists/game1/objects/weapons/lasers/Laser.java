@@ -72,9 +72,6 @@ public abstract class Laser extends GameObject implements Collideable {
             }
 
             damagePerSecond = returnModifiedDamage(generator, wielder);
-            if(wielder instanceof Player) {
-                System.out.println(returnModifiedDamage(generator, wielder));
-            }
             degrees = calculateDegrees();
             lineLength = calculateLineLength();
             getCollisionList().forEach(g -> {
