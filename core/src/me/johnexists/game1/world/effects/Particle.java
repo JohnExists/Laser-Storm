@@ -2,7 +2,7 @@ package me.johnexists.game1.effects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Location;
 
 public abstract class Particle {
 

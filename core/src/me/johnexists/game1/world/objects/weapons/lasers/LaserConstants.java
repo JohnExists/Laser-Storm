@@ -11,7 +11,7 @@ import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
 import static com.badlogic.gdx.Gdx.files;
 
 @SuppressWarnings("all")
-public enum LaserConstants {
+public enum LaserConstants implements Constant{
     NONE (-1),
     RED (0),
     BLUE (1),
@@ -34,4 +34,13 @@ public enum LaserConstants {
                 positionNumber * 10, 4000, 10);
     }
 
+    @Override
+    public Constant[] returnList() {
+        return values();
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return displaySprite;
+    }
 }

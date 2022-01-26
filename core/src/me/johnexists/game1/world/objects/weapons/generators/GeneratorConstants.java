@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import me.johnexists.game1.objects.attributes.Size;
 import me.johnexists.game1.objects.entities.DamageableEntity;
+import me.johnexists.game1.objects.weapons.Constant;
 
 import static com.badlogic.gdx.Gdx.files;
 
 @SuppressWarnings("all")
-public enum GeneratorConstants {
+public enum GeneratorConstants implements Constant {
     NONE (-1),
     MINI (0),
     MAX (1),
@@ -46,5 +47,15 @@ public enum GeneratorConstants {
             case HYPER_CHARGED -> 800f;
         };
 
+    }
+
+    @Override
+    public Constant[] returnList() {
+        return new Constant[0];
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return displaySprite;
     }
 }

@@ -1,18 +1,18 @@
-package me.johnexists.game1.enemyai.ai;
+package me.johnexists.game1.world.objects.entities.enemyai.ai;
 
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.attributes.LaserWielder;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.enemyai.AITask;
-import me.johnexists.game1.enemyai.AITaskHost;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.Player;
-import me.johnexists.game1.objects.weapons.lasers.Laser;
+import me.johnexists.game1.world.objects.attributes.LaserWielder;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.enemyai.AITask;
+import me.johnexists.game1.world.objects.entities.enemyai.AITaskHost;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 
 import static java.lang.Math.abs;
 import static java.util.Objects.*;
-import static me.johnexists.game1.objects.entities.enemies.Enemy.*;
+import static me.johnexists.game1.world.objects.entities.enemies.Enemy.*;
 
 public class LaserAttackAI implements AITask {
 

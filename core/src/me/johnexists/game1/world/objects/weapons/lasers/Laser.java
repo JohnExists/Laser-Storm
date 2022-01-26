@@ -3,10 +3,7 @@ package me.johnexists.game1.objects.weapons.lasers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
 import me.johnexists.game1.objects.attributes.*;
 import me.johnexists.game1.effects.BloodParticle;
 import me.johnexists.game1.effects.DamageDisplayParticle;
@@ -83,6 +80,22 @@ public abstract class Laser extends GameObject implements Collideable {
 
     protected void onCollision(float deltaTime, DamageableEntity damageableEntity) {
         damageableEntity.damage(damagePerSecond * deltaTime);
+
+        float knockBackDistance;
+
+        if (wielder instanceof Player) {
+            knockBackDistance = 390;
+        } else {
+            knockBackDistance = 130;
+        }
+
+        Location locationBetweenOpponents = damageableEntity.getLocation().distanceTo(wielder);
+        Vector2 vectorBetweenOpponents = new Vector2(locationBetweenOpponents.getX(), locationBetweenOpponents.getY());
+        vectorBetweenOpponents.nor();
+        vectorBetweenOpponents.x *= deltaTime * knockBackDistance * -1;
+        vectorBetweenOpponents.y *= deltaTime * knockBackDistance * -1;
+        damageableEntity.getLocation().add(new Location(vectorBetweenOpponents.x, vectorBetweenOpponents.y));
+
         getLocation().getWorld().spawnParticle(new DamageDisplayParticle(damagePerSecond, damageableEntity, deltaTime));
 
     }

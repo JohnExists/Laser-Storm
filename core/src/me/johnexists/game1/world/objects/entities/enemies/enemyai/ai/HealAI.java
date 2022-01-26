@@ -1,22 +1,22 @@
-package me.johnexists.game1.enemyai.ai;
+package me.johnexists.game1.world.objects.entities.enemyai.ai;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.enemyai.AITask;
-import me.johnexists.game1.enemyai.AITaskHost;
-import me.johnexists.game1.objects.GameObject;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.enemies.Enemy;
-import me.johnexists.game1.objects.entities.enemies.EnemyHealer;
-import me.johnexists.game1.objects.weapons.lasers.Laser;
-import me.johnexists.game1.objects.weapons.lasers.LaserConstants;
+import me.johnexists.game1.world.objects.entities.enemyai.AITask;
+import me.johnexists.game1.world.objects.entities.enemyai.AITaskHost;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.enemies.Enemy;
+import me.johnexists.game1.world.objects.entities.enemies.EnemyHealer;
+import me.johnexists.game1.world.objects.weapons.lasers.Laser;
+import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
 public class HealAI implements AITask {
 

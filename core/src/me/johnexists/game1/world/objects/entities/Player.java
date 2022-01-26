@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import me.johnexists.game1.abilities.Ability;
+import me.johnexists.game1.abilities.AbilityConstants;
 import me.johnexists.game1.abilities.Deranger;
 import me.johnexists.game1.abilities.Repulsor;
 import me.johnexists.game1.logic.GameLogic;
@@ -21,15 +22,15 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.badlogic.gdx.Input.Keys.*;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Player extends DamageableEntity implements CircleShape, LaserWielder {
 
     public static LaserConstants laserSkin = LaserConstants.RAINBOW;
     public static GeneratorConstants laserGenerator = GeneratorConstants.MINI;
-    public static float playerScalar = 10, passiveHealPerSecond = 3.5f;
+    public static AbilityConstants abilityConstants = AbilityConstants.DERANGER;
+    public static float playerScalar = 15, passiveHealPerSecond = 3.5f;
     public static int kills = 0;
 
     private final GameLogic gameLogic;
@@ -47,12 +48,16 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
 //        health =  MAX_OVERFLOW_HEALTH;
 
-        currentAbility = empty();
+        currentAbility = Optional.empty();
         viewingOrderWeight = 5;
 
         gameLogic.getKeyInput().registerOnKeyReleased(Q, () -> {
             if (currentAbility.isEmpty()) {
-                currentAbility = of(new Deranger(this));
+                currentAbility = switch (Player.abilityConstants) {
+                    case NONE -> Optional.empty();
+                    case REPULSOR -> Optional.of(new Repulsor(this));
+                    case DERANGER -> Optional.of(new Deranger(this));
+                };
             }
         });
     }
@@ -86,7 +91,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         currentAbility.ifPresent(ability -> {
             if (ability.isDone()) {
                 setImmortal(false);
-                currentAbility = empty();
+                currentAbility = Optional.empty();
             }
         });
         currentAbility.ifPresent(ability -> ability.update(deltaTime));
@@ -112,7 +117,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
 //        shapeRenderer.setProjectionMatrix(getLocation().getWorld().getGameState().getGameCamera().combined);
         currentAbility.ifPresent(ability -> ability.render(shapeRenderer, spriteBatch));
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(Filled);
         {
             shapeRenderer.setColor(Color.BLUE);
             shapeRenderer.circle(location.getX(), location.getY(), RADIUS);
@@ -146,4 +151,13 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
     public static void setLaserGenerator(GeneratorConstants laserGenerator) {
         Player.laserGenerator = laserGenerator;
     }
+
+    public static AbilityConstants getAbilityConstants() {
+        return abilityConstants;
+    }
+
+    public static void setAbilityConstants(AbilityConstants abilityConstants) {
+        Player.abilityConstants = abilityConstants;
+    }
+
 }

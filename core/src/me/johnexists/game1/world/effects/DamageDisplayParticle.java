@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.GameObject;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.GameObject;
 import me.johnexists.game1.world.World;
 
 import java.text.DecimalFormat;
 
-@SuppressWarnings("unused")
 public class DamageDisplayParticle extends Particle {
 
     private static final float LIFE_EXPECTANCY = 1f;
