@@ -1,14 +1,14 @@
-package me.johnexists.game1.objects.entities.enemies;
+package me.johnexists.game1.world.objects.entities.enemies;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.attributes.LaserWielder;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
-import me.johnexists.game1.objects.weapons.lasers.BasicLaser;
-import me.johnexists.game1.objects.weapons.lasers.Laser;
+import me.johnexists.game1.world.objects.attributes.LaserWielder;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.world.objects.weapons.lasers.BasicLaser;
+import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 
 /*
  * --- Default Enemy ---

@@ -1,11 +1,11 @@
-package me.johnexists.game1.objects.attributes;
+package me.johnexists.game1.world.objects.attributes;
 
-import me.johnexists.game1.objects.GameObject;
-import me.johnexists.game1.objects.entities.Entity;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.entities.Entity;
 import me.johnexists.game1.world.World;
 
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
-import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
 public class Location {
 

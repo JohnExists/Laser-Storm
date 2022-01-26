@@ -1,4 +1,4 @@
-package me.johnexists.game1.world.objects.entities.enemyai;
+package me.johnexists.game1.world.objects.entities.enemies.enemyai;
 
 public interface AITaskHost {
 

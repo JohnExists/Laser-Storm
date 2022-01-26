@@ -1,4 +1,4 @@
-package me.johnexists.game1.abilities;
+package me.johnexists.game1.world.objects.abilities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,7 +21,7 @@ import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultipli
 public class Deranger extends Ability {
 
     private final Player player;
-    private final List<AbilityLaser> lasers;
+    private List<AbilityLaser> lasers;
 
     public Deranger(Player player) {
         this.player = player;
@@ -32,8 +32,6 @@ public class Deranger extends Ability {
 
     @Override
     protected void whileActive(float deltaTime) {
-        player.heal(0.0075f);
-
         for (int i = 0; i < lasers.size(); i++) {
             lasers.get(i).update(deltaTime);
             if (!lasers.get(i).getTarget().isAlive()) {
@@ -46,6 +44,9 @@ public class Deranger extends Ability {
             }
         }
 
+        lasers = lasers.stream()
+                .filter(laser -> laser.getTarget().isAlive())
+                .collect(Collectors.toList());
 
         if(lasers.size() == 0) {
             initList();
@@ -74,7 +75,7 @@ public class Deranger extends Ability {
         private final DamageableEntity target;
 
         public AbilityLaser(DamageableEntity target) {
-            super(player, target, GeneratorConstants.MAX);
+            super(player, target, GeneratorConstants.MINI);
             this.target = target;
             enable();
         }

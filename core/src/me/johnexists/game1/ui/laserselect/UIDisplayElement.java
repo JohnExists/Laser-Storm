@@ -1,14 +1,14 @@
 package me.johnexists.game1.ui.laserselect;
 
 import com.badlogic.gdx.graphics.Color;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.state.LaserSelectState;
 import me.johnexists.game1.ui.UIElement;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
-import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
 public class UIDisplayElement extends UIElement {
 

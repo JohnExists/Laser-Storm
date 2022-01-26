@@ -1,12 +1,12 @@
-package me.johnexists.game1.objects.entities.enemies;
+package me.johnexists.game1.world.objects.entities.enemies;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.enemyai.ai.HealAI;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.ai.HealAI;
 
 /*
  * --- Enemy Healer ---

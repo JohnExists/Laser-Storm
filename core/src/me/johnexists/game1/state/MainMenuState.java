@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import me.johnexists.game1.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.logic.GameLogic;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.ui.uimenu.UIButton;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static com.badlogic.gdx.Gdx.graphics;
 import static java.util.List.of;
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
 
 @SuppressWarnings("all")
 public class MainMenuState extends State {

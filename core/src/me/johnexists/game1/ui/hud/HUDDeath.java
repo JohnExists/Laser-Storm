@@ -1,22 +1,22 @@
 package me.johnexists.game1.ui.hud;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.ui.UIElement;
 
 import static com.badlogic.gdx.Gdx.gl;
 import static com.badlogic.gdx.Gdx.graphics;
+import static com.badlogic.gdx.graphics.GL20.*;
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
 
 public class HUDDeath extends UIElement {
 
-    private ShapeRenderer renderBackground;
-    private GlyphLayout mainGlyphLayout, secondaryGlyphLayout;
+    private final ShapeRenderer renderBackground;
+    private final GlyphLayout mainGlyphLayout, secondaryGlyphLayout;
     private final float WIDTH = graphics.getWidth(),
             HEIGHT = graphics.getHeight();
 
@@ -56,15 +56,15 @@ public class HUDDeath extends UIElement {
     }
 
     public void renderDeathScreen() {
-        renderBackground.begin(ShapeRenderer.ShapeType.Filled);
+        renderBackground.begin(Filled);
         {
-            graphics.getGL20().glEnable(GL20.GL_BLEND);
-            gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            graphics.getGL20().glEnable(GL_BLEND);
+            gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             renderBackground.setColor(new Color(1, 0, 0, 0.65f));
             renderBackground.rect(0, 0, WIDTH, HEIGHT);
         }
         renderBackground.end();
-        gl.glDisable(GL20.GL_BLEND);
+        gl.glDisable(GL_BLEND);
     }
 
     @Override

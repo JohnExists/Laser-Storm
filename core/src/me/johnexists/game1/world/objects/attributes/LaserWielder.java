@@ -1,6 +1,6 @@
-package me.johnexists.game1.objects.attributes;
+package me.johnexists.game1.world.objects.attributes;
 
-import me.johnexists.game1.objects.weapons.lasers.Laser;
+import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 
 public interface LaserWielder {
 

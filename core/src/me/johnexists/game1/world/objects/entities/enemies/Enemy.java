@@ -1,14 +1,14 @@
-package me.johnexists.game1.objects.entities.enemies;
+package me.johnexists.game1.world.objects.entities.enemies;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.enemyai.AITask;
-import me.johnexists.game1.enemyai.AITaskHost;
-import me.johnexists.game1.enemyai.ai.StandStillAI;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.Player;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITask;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITaskHost;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.ai.StandStillAI;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
 import me.johnexists.game1.world.World;
 
 import java.util.stream.Collectors;

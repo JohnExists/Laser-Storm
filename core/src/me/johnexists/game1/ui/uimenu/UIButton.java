@@ -3,8 +3,8 @@ package me.johnexists.game1.ui.uimenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.state.State;
 import me.johnexists.game1.ui.UIElement;
 

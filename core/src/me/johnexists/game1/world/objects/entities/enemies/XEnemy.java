@@ -1,4 +1,4 @@
-package me.johnexists.game1.objects.entities.enemies;
+package me.johnexists.game1.world.objects.entities.enemies;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import me.johnexists.game1.objects.attributes.Collideable;
-import me.johnexists.game1.objects.attributes.LaserWielder;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.effects.BloodParticle;
-import me.johnexists.game1.objects.GameObject;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.Player;
+import me.johnexists.game1.world.objects.attributes.Collideable;
+import me.johnexists.game1.world.objects.attributes.LaserWielder;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.effects.BloodParticle;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
 
 import java.util.ArrayList;
 import java.util.List;

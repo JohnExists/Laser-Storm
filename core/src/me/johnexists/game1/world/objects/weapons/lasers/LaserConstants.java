@@ -1,12 +1,10 @@
-package me.johnexists.game1.objects.weapons.lasers;
+package me.johnexists.game1.world.objects.weapons.lasers;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.weapons.Constant;
-import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.world.objects.weapons.Constant;
 
 import static com.badlogic.gdx.Gdx.files;
 

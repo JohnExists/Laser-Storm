@@ -1,7 +1,7 @@
-package me.johnexists.game1.objects.weapons.generators;
+package me.johnexists.game1.world.objects.weapons.generators;
 
-import me.johnexists.game1.objects.attributes.LaserWielder;
-import me.johnexists.game1.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.attributes.LaserWielder;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
 
 public class GeneratorSystem {
 

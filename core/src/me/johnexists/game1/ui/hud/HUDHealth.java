@@ -2,10 +2,10 @@ package me.johnexists.game1.ui.hud;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import me.johnexists.game1.objects.attributes.Damageable;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.attributes.Damageable;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
 import me.johnexists.game1.ui.UIElement;
 
 import static com.badlogic.gdx.Gdx.gl;
@@ -97,6 +97,11 @@ public class HUDHealth extends UIElement implements Damageable {
 
     @Override
     public void heal(float heal) {
+
+    }
+
+    @Override
+    public void overflowHeal(float heal) {
 
     }
 }

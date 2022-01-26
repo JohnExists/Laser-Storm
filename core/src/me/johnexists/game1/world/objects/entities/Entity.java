@@ -1,9 +1,9 @@
-package me.johnexists.game1.objects.entities;
+package me.johnexists.game1.world.objects.entities;
 
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Velocity;
-import me.johnexists.game1.enemyai.AITaskHost;
-import me.johnexists.game1.objects.GameObject;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Velocity;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITaskHost;
+import me.johnexists.game1.world.objects.GameObject;
 
 import java.util.List;
 import java.util.stream.Collectors;

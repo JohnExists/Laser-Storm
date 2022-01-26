@@ -1,11 +1,11 @@
-package me.johnexists.game1.world.objects.entities.enemyai.ai;
+package me.johnexists.game1.world.objects.entities.enemies.enemyai.ai;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import me.johnexists.game1.world.objects.entities.enemyai.AITask;
-import me.johnexists.game1.world.objects.entities.enemyai.AITaskHost;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITask;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITaskHost;
 import me.johnexists.game1.world.objects.GameObject;
 import me.johnexists.game1.world.objects.attributes.Collideable;
 import me.johnexists.game1.world.objects.attributes.LaserWielder;

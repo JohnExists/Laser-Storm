@@ -1,4 +1,4 @@
-package me.johnexists.game1.objects.attributes;
+package me.johnexists.game1.world.objects.attributes;
 
 import com.badlogic.gdx.math.Vector2;
 

@@ -4,22 +4,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import me.johnexists.game1.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.logic.GameLogic;
-import me.johnexists.game1.objects.entities.Player;
-import me.johnexists.game1.objects.weapons.lasers.LaserConstants;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
 import me.johnexists.game1.ui.UIElement;
-import me.johnexists.game1.ui.laserselect.UIBottomPanelElement;
+import me.johnexists.game1.ui.laserselect.UIPanelElement;
 import me.johnexists.game1.ui.laserselect.UIDisplayElement;
-import me.johnexists.game1.ui.laserselect.UITopPanelElement;
 import me.johnexists.game1.ui.uimenu.UIButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static java.util.Optional.of;
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
-import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
 @SuppressWarnings("all")
 public class LaserSelectState extends State {
@@ -47,12 +46,11 @@ public class LaserSelectState extends State {
         back.setColor(Color.WHITE);
         back.setScale(0.90f);
         back.setDisplayText("Back");
-        back.setOnClick(() -> gameLogic.setSelectedState(of(new MainMenuState(gameLogic))));
+        back.setOnClick(() -> gameLogic.setSelectedState(Optional.of(new MainMenuState(gameLogic))));
 
         uiElements.add(back);
         uiElements.add(new UIDisplayElement(this));
-        uiElements.add(new UITopPanelElement(this));
-        uiElements.add(new UIBottomPanelElement(this));
+        uiElements.add(new UIPanelElement(this));
     }
 
     @Override

@@ -1,9 +1,9 @@
-package me.johnexists.game1.objects;
+package me.johnexists.game1.world.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 
 
 public abstract class GameObject {
@@ -44,12 +44,13 @@ public abstract class GameObject {
     }
 
     public boolean isA(Class c) {
-        return getClass().isAssignableFrom(c);
-//        try {
-//            return Class.forName(getClass().toString()).isInstance(c.getClass());
-//        } catch (ClassNotFoundException e) {
-//            return false;
+//        Class thisClass = getClass();
+//        while (thisClass != null) {
+//            thisClass = thisClass.getSuperclass();
 //        }
+//        assert false;
+//        return thisClass.equals(c);
+        return false;
     }
 
 }

@@ -1,43 +1,43 @@
-package me.johnexists.game1.objects.entities;
+package me.johnexists.game1.world.objects.entities;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import me.johnexists.game1.abilities.Ability;
-import me.johnexists.game1.abilities.AbilityConstants;
-import me.johnexists.game1.abilities.Deranger;
-import me.johnexists.game1.abilities.Repulsor;
+import me.johnexists.game1.world.objects.abilities.Ability;
+import me.johnexists.game1.world.objects.abilities.AbilityConstants;
+import me.johnexists.game1.world.objects.abilities.Deranger;
+import me.johnexists.game1.world.objects.abilities.Repulsor;
 import me.johnexists.game1.logic.GameLogic;
-import me.johnexists.game1.objects.attributes.CircleShape;
-import me.johnexists.game1.objects.attributes.LaserWielder;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
-import me.johnexists.game1.objects.weapons.lasers.BasicLaser;
-import me.johnexists.game1.objects.weapons.lasers.Laser;
-import me.johnexists.game1.objects.weapons.lasers.LaserConstants;
+import me.johnexists.game1.world.objects.attributes.CircleShape;
+import me.johnexists.game1.world.objects.attributes.LaserWielder;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.world.objects.weapons.lasers.BasicLaser;
+import me.johnexists.game1.world.objects.weapons.lasers.Laser;
+import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
 import me.johnexists.game1.state.State;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Player extends DamageableEntity implements CircleShape, LaserWielder {
 
     public static LaserConstants laserSkin = LaserConstants.RAINBOW;
     public static GeneratorConstants laserGenerator = GeneratorConstants.MINI;
     public static AbilityConstants abilityConstants = AbilityConstants.DERANGER;
-    public static float playerScalar = 15, passiveHealPerSecond = 3.5f;
+    public static float playerScalar = 115, passiveHealPerSecond = 3.5f;
     public static int kills = 0;
 
     private final GameLogic gameLogic;
-    private final float DISTANCE_PER_SECOND = 295, //255
+    private final float DISTANCE_PER_SECOND = 405, //255
             RADIUS = ((getSize().getWidth() + getSize().getHeight()) / 2) / 2;
 
     private Laser laser;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<Ability> currentAbility;
 
     public Player(State state, Location location) {
@@ -51,7 +51,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         currentAbility = Optional.empty();
         viewingOrderWeight = 5;
 
-        gameLogic.getKeyInput().registerOnKeyReleased(Q, () -> {
+        gameLogic.getKeyInput().registerOnKeyReleased(Input.Keys.Q, () -> {
             if (currentAbility.isEmpty()) {
                 currentAbility = switch (Player.abilityConstants) {
                     case NONE -> Optional.empty();
@@ -69,24 +69,22 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         float speed;
 
         isSprinting.set(false);
-        gameLogic.getKeyInput().isPressed(SHIFT_LEFT, () -> isSprinting.set(true));
+        gameLogic.getKeyInput().isPressed(Input.Keys.SHIFT_LEFT, () -> isSprinting.set(true));
 
         speed = isSprinting.get() ? 155f : 0f;
         float finalSpeed = speed;
 
-        gameLogic.getKeyInput().isPressed(W,
+        gameLogic.getKeyInput().isPressed(Input.Keys.W,
                 () -> velocity.add(0, DISTANCE_PER_SECOND + finalSpeed));
 
-        gameLogic.getKeyInput().isPressed(S,
+        gameLogic.getKeyInput().isPressed(Input.Keys.S,
                 () -> velocity.add(0, -DISTANCE_PER_SECOND - finalSpeed));
 
-        gameLogic.getKeyInput().isPressed(D,
+        gameLogic.getKeyInput().isPressed(Input.Keys.D,
                 () -> velocity.add(DISTANCE_PER_SECOND + finalSpeed, 0));
 
-        gameLogic.getKeyInput().isPressed(A,
+        gameLogic.getKeyInput().isPressed(Input.Keys.A,
                 () -> velocity.add(-DISTANCE_PER_SECOND - finalSpeed, 0));
-
-
 
         currentAbility.ifPresent(ability -> {
             if (ability.isDone()) {
@@ -140,24 +138,38 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         return laserSkin;
     }
 
-    public static void setLaserSkin(LaserConstants laserSkin) {
-        Player.laserSkin = laserSkin;
+    public static void swapLaserSkin(LaserConstants laserSkin) {
+        if (Player.laserSkin.equals(laserSkin)) {
+            Player.laserSkin = LaserConstants.NONE;
+        } else {
+            Player.laserSkin = laserSkin;
+        }
     }
 
     public static GeneratorConstants getLaserGenerator() {
         return laserGenerator;
     }
 
-    public static void setLaserGenerator(GeneratorConstants laserGenerator) {
-        Player.laserGenerator = laserGenerator;
+    public static void swapLaserGenerator(GeneratorConstants laserGenerator) {
+        if (Player.laserGenerator.equals(laserGenerator)) {
+            Player.laserGenerator = GeneratorConstants.NONE;
+        } else {
+            Player.laserGenerator = laserGenerator;
+
+        }
     }
 
     public static AbilityConstants getAbilityConstants() {
         return abilityConstants;
     }
 
-    public static void setAbilityConstants(AbilityConstants abilityConstants) {
-        Player.abilityConstants = abilityConstants;
+    public static void swapAbilityConstants(AbilityConstants abilityConstants) {
+        if (Player.abilityConstants.equals(abilityConstants)) {
+            Player.abilityConstants = AbilityConstants.NONE;
+        } else {
+            Player.abilityConstants = abilityConstants;
+
+        }
     }
 
 }

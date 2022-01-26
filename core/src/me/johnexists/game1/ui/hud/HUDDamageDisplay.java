@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.GameObject;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.GameObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -26,7 +26,6 @@ public class HUDDamageDisplay {
 
     public void addHealthIndicator(float damage, GameObject gameObject) {
         if (!checkDuplicatesOf(gameObject)) {
-            // TODO Add a GeneratorConstants value for each damageableEntity and implement  it here
             damageDisplays.add(new HUDDamageDisplayElement(damage, gameObject));
         }
     }

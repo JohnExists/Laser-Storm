@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.GameObject;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.enemies.Enemy;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.enemies.Enemy;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.world.World;
 
@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 import static com.badlogic.gdx.Gdx.gl;
 import static com.badlogic.gdx.Gdx.graphics;
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
-import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
 @SuppressWarnings({
         "MismatchedQueryAndUpdateOfCollection",

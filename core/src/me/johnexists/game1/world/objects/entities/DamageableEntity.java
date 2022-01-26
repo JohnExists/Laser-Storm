@@ -1,13 +1,13 @@
-package me.johnexists.game1.objects.entities;
+package me.johnexists.game1.world.objects.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import me.johnexists.game1.objects.attributes.Collideable;
-import me.johnexists.game1.objects.attributes.Damageable;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
+import me.johnexists.game1.world.objects.attributes.Collideable;
+import me.johnexists.game1.world.objects.attributes.Damageable;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 
 import static com.badlogic.gdx.Gdx.gl;
 import static com.badlogic.gdx.Gdx.graphics;
@@ -55,7 +55,15 @@ public abstract class DamageableEntity extends Entity implements Collideable, Da
 
     @Override
     public void heal(float heal) {
+        if (health < MAX_HEALTH) {
+            health = Math.min(health + heal, MAX_HEALTH);
+        }
+    }
+
+    @Override
+    public void overflowHeal(float heal) {
         health = Math.min(health + heal, MAX_OVERFLOW_HEALTH);
+
     }
 
     public float getHealth() {

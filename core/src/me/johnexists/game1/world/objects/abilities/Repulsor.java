@@ -1,4 +1,4 @@
-package me.johnexists.game1.abilities;
+package me.johnexists.game1.world.objects.abilities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,6 +8,8 @@ import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.world.objects.entities.DamageableEntity;
 import me.johnexists.game1.world.objects.entities.Player;
+
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Repulsor extends Ability {
@@ -50,7 +52,7 @@ public class Repulsor extends Ability {
     public void render(ShapeRenderer shapeRenderer, SpriteBatch spriteBatch) {
         float radius = (75 + (STARTER_TICKS - ticksLeft) * 120) * Size.getXSizeMultiplier();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.begin(Line);
         {
             shapeRenderer.setColor(Color.MAROON);
             shapeRenderer.circle(player.getLocation().getX(), player.getLocation().getY(), radius);

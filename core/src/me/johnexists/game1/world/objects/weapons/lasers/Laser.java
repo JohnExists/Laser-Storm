@@ -1,21 +1,21 @@
-package me.johnexists.game1.objects.weapons.lasers;
+package me.johnexists.game1.world.objects.weapons.lasers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
-import me.johnexists.game1.objects.attributes.*;
-import me.johnexists.game1.effects.BloodParticle;
-import me.johnexists.game1.effects.DamageDisplayParticle;
-import me.johnexists.game1.objects.GameObject;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.Player;
-import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.world.objects.attributes.*;
+import me.johnexists.game1.world.effects.BloodParticle;
+import me.johnexists.game1.world.effects.DamageDisplayParticle;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.johnexists.game1.objects.weapons.generators.GeneratorConstants.returnModifiedDamage;
+import static me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants.returnModifiedDamage;
 
 public abstract class Laser extends GameObject implements Collideable {
 

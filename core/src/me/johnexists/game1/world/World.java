@@ -3,17 +3,17 @@ package me.johnexists.game1.world;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.effects.Particle;
-import me.johnexists.game1.objects.GameObject;
-import me.johnexists.game1.objects.attributes.LaserWielder;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.Player;
-import me.johnexists.game1.objects.entities.enemies.DefaultEnemy;
-import me.johnexists.game1.objects.entities.enemies.EnemyHealer;
-import me.johnexists.game1.objects.entities.enemies.EnemyPlusPlus;
-import me.johnexists.game1.objects.entities.enemies.XEnemy;
+import me.johnexists.game1.world.effects.Particle;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.attributes.LaserWielder;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.entities.enemies.DefaultEnemy;
+import me.johnexists.game1.world.objects.entities.enemies.EnemyHealer;
+import me.johnexists.game1.world.objects.entities.enemies.EnemyPlusPlus;
+import me.johnexists.game1.world.objects.entities.enemies.XEnemy;
 import me.johnexists.game1.state.GameState;
 
 import java.util.ArrayList;
@@ -22,21 +22,19 @@ import java.util.List;
 
 import static com.badlogic.gdx.Gdx.gl;
 import static com.badlogic.gdx.Gdx.graphics;
-import static com.badlogic.gdx.math.MathUtils.clamp;
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
 
-@SuppressWarnings("all")
 public class World {
 
-    public static final float MAP_X = 5000 * Size.getYSizeMultiplier(),
-            MAP_Y = 5000 * Size.getYSizeMultiplier();
+    public static final float MAP_X = 8500 * Size.getYSizeMultiplier(),
+            MAP_Y = 8500 * Size.getYSizeMultiplier();
     private final List<GameObject> gameObjects;
     private final List<Particle> activeParticles;
     private final GameState gameState;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private Player player;
     private DamageableEntity mainCharacter;
-    private boolean isCameraSynchronized = false;
 
     public World(GameState gameState) {
         this.gameState = gameState;
@@ -44,8 +42,6 @@ public class World {
         activeParticles = new ArrayList<>();
         loadEntities();
 //        mainCharacter.setImmortal(true);
-//        spawn(new DefaultEnemy(new Location(player.getLocation().getX() + 2000 * Size.getXSizeMultiplier(),
-//                player.getLocation().getY() + 2000 * Size.getYSizeMultiplier(), this)));
 
         sortList();
     }
@@ -55,7 +51,6 @@ public class World {
         gameObjects.clear();
         mainCharacter = null;
         player = new Player(gameState, new Location(1000, 1000, this));
-//        player.setLocation(new Location(1500 * getXSizeMultiplier(), 1500 * getYSizeMultiplier(), this));
         mainCharacter = player;
         spawn(player);
         for (int i = 0; i < 25; i++) {
@@ -68,6 +63,7 @@ public class World {
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     public void update(float deltaTime) {
         synchronizeCameraWith(mainCharacter);
         sortList();
@@ -81,11 +77,12 @@ public class World {
                     }
                 }
             }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException ignored) {
         }
 
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     public void render() {
         SpriteBatch spriteBatch = getGameState().getSpriteBatch();
         ShapeRenderer shapeRenderer = getGameState().getShapeRenderer();
@@ -135,12 +132,13 @@ public class World {
         gameObjects.add(gameObject);
     }
 
-    public void spawnParticle(Particle particles) {
-        if (particles.isAvailable()) {
-            activeParticles.add(particles);
+    public void spawnParticle(Particle particle) {
+        if (particle.isAvailable()) {
+            activeParticles.add(particle);
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public void despawn(GameObject gameObject) {
         gameObjects.remove(gameObject);
     }
@@ -171,18 +169,12 @@ public class World {
     }
 
     public void synchronizeCameraWith(GameObject gameObject) {
-        if (isCameraSynchronized) {
-            Location obLoc = gameObject.getLocation();
-            float width = graphics.getWidth() / 2, height = graphics.getHeight() / 2;
-            float x = clamp(obLoc.getX(), width, MAP_X - width),
-                    y = clamp(obLoc.getY(), height, MAP_Y - height);
+        Location obLoc = gameObject.getLocation();
+        float width = graphics.getWidth() / 2f, height = graphics.getHeight() / 2f;
+        float x = MathUtils.clamp(obLoc.getX(), width, MAP_X - width),
+                y = MathUtils.clamp(obLoc.getY(), height, MAP_Y - height);
 
-            gameState.getGameCamera().position.set(x, y, 0);
-            gameState.getGameCamera().update();
-        } else {
-            gameObject.getLocation().setX(gameState.getGameCamera().position.x);
-            gameObject.getLocation().setY(gameState.getGameCamera().position.y);
-            isCameraSynchronized = true;
-        }
+        gameState.getGameCamera().position.set(x, y, 0);
+        gameState.getGameCamera().update();
     }
 }

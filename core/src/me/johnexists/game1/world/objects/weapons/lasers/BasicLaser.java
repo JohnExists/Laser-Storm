@@ -1,11 +1,11 @@
-package me.johnexists.game1.objects.weapons.lasers;
+package me.johnexists.game1.world.objects.weapons.lasers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.objects.entities.DamageableEntity;
-import me.johnexists.game1.objects.entities.Player;
-import me.johnexists.game1.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
 
 public class BasicLaser extends Laser {
 

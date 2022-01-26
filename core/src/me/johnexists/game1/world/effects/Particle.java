@@ -1,4 +1,4 @@
-package me.johnexists.game1.effects;
+package me.johnexists.game1.world.effects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

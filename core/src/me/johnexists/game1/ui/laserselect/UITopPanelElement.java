@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
-import me.johnexists.game1.objects.entities.Player;
-import me.johnexists.game1.objects.weapons.lasers.LaserConstants;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
 import me.johnexists.game1.state.LaserSelectState;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.ui.uimenu.UIButton;
@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.badlogic.gdx.math.MathUtils.floor;
-import static me.johnexists.game1.objects.attributes.Size.getXSizeMultiplier;
-import static me.johnexists.game1.objects.attributes.Size.getYSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
+import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
+@Deprecated
 public class UITopPanelElement extends UIElement {
 
     private final LaserSelectState laserSelectState;
@@ -63,7 +64,7 @@ public class UITopPanelElement extends UIElement {
             super(laserSelectState);
             setColor(Color.WHITE);
             setLocation(calculateLocationRelativeToIndex(index - 1));
-            setOnClick(() -> Player.setLaserSkin(LaserConstants.values()[index]));
+            setOnClick(() -> Player.swapLaserSkin(LaserConstants.values()[index]));
             this.index = index;
             this.size = new Size(50, 50);
         }

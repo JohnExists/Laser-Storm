@@ -1,7 +1,6 @@
-package me.johnexists.game1.objects.weapons;
+package me.johnexists.game1.world.objects.weapons;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import me.johnexists.game1.objects.weapons.lasers.LaserConstants;
 
 public interface Constant {
 

@@ -1,4 +1,4 @@
-package me.johnexists.game1.objects.attributes;
+package me.johnexists.game1.world.objects.attributes;
 
 public interface Damageable {
 
@@ -7,5 +7,6 @@ public interface Damageable {
 
     void damage(float damage);
     void heal(float heal);
+    void overflowHeal(float heal);
 
 }

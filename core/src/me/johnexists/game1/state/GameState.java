@@ -1,13 +1,12 @@
 package me.johnexists.game1.state;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.objects.attributes.Location;
-import me.johnexists.game1.objects.attributes.Size;
 import me.johnexists.game1.logic.GameLogic;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.ui.hud.HUDDeath;
 import me.johnexists.game1.ui.hud.HUDHealth;
@@ -17,6 +16,10 @@ import me.johnexists.game1.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.badlogic.gdx.Gdx.gl;
+import static com.badlogic.gdx.Gdx.graphics;
 
 public class GameState extends State {
 
@@ -25,8 +28,8 @@ public class GameState extends State {
     private final ShapeRenderer shapeRenderer;
     private final List<UIElement> hudElements;
     private final HUDPause hudPause;
+    private final World world;
 
-    private World world;
     private boolean paused;
 
     public GameState(GameLogic gameLogic) {
@@ -39,7 +42,7 @@ public class GameState extends State {
         spriteBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
-        gameCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        gameCamera = new OrthographicCamera(graphics.getWidth(), graphics.getHeight());
         gameCamera.update();
 
         initHUD();
@@ -49,9 +52,7 @@ public class GameState extends State {
     }
 
     public void createNewWorld() {
-//        this.world = null;
-//        this.world = new World(this);
-//        world.spawnEntities();
+        world.getGameObjects().clear();
         world.loadEntities();
         paused = false;
     }
@@ -59,15 +60,15 @@ public class GameState extends State {
     public void initHUD() {
         hudElements.clear();
         hudElements.add(new HUDHealth(new Location(50 * Size.getXSizeMultiplier(),
-                Gdx.graphics.getHeight() - 50 * Size.getXSizeMultiplier(), world),
+                graphics.getHeight() - 50 * Size.getXSizeMultiplier(), world),
                 new Size(100, 100), world.getMainCharacter()));
-        hudElements.add(new HUDMinimap(new Location(Gdx.graphics.getWidth() - 100 * Size.getXSizeMultiplier(),
-                Gdx.graphics.getHeight() - 100 * Size.getYSizeMultiplier()), world));
+        hudElements.add(new HUDMinimap(new Location(graphics.getWidth() - 100 * Size.getXSizeMultiplier(),
+                graphics.getHeight() - 100 * Size.getYSizeMultiplier()), world));
     }
 
     @Override
     public void render() {
-        Gdx.gl.glLineWidth(Size.getXSizeMultiplier());
+        gl.glLineWidth(Size.getXSizeMultiplier());
         spriteBatch.setProjectionMatrix(gameCamera.combined);
         shapeRenderer.setProjectionMatrix(gameCamera.combined);
         world.render();
@@ -92,10 +93,11 @@ public class GameState extends State {
                 hudElements.forEach(hudElement -> hudElement.update(deltaTime));
             } else {
                 gameLogic.getKeyInput().isPressed(Input.Keys.R, () -> {
-                    hudElements.clear();
-                    world = new World(this);
+                    createNewWorld();
                     initHUD();
                 });
+                gameLogic.getKeyInput().isPressed(Input.Keys.M, () ->
+                        gameLogic.setSelectedState(Optional.of(new MainMenuState(getGameLogic()))));
             }
         } else {
             hudPause.update(deltaTime);
