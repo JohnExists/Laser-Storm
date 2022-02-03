@@ -39,12 +39,12 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
     protected Optional<BulletPlusPlus> currentBullet;
     private Laser laser;
 
-    public EnemyPlusPlus(Location location) {
-        super(location);
+    public EnemyPlusPlus(Location location, float minScalar, float maxScalar) {
+        super(location, minScalar, maxScalar);
         this.size = new Size(65, 65);
         this.enemyColour = new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1);
         this.laser = new BasicLaser(this, getLocalPlayer(getLocation().getWorld()),
-                GeneratorConstants.values()[MathUtils.random(1, 5)]);
+                GeneratorConstants.values()[MathUtils.random(4, 5)]);
         laser.disable();
         currentBullet = empty();
         enemyType = AGGRESSIVE_LAUNCH;
