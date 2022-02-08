@@ -75,7 +75,7 @@ public class Deranger extends Ability {
         private final DamageableEntity target;
 
         public AbilityLaser(DamageableEntity target) {
-            super(player, target, GeneratorConstants.MINI);
+            super(player, target, Player.getLaserGenerator());
             this.target = target;
             enable();
         }

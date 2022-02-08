@@ -15,15 +15,16 @@ import java.util.Optional;
 @SuppressWarnings("all")
 public class GameLogic extends Game {
 
-    private final float CYCLE_SPEED = 0.01f;
+    private static final float CYCLE_SPEED = 0.01f;
+
+    private static float r = 0f, g = 0, b = 0;
+    private static boolean reversed = false;
+    static char currSel = 'r';
 
     private UpdateLogic updateLogic;
     private RenderLogic renderLogic;
     private KeyInput keyInput;
     private Optional<State> selectedState;
-    private float r = 0f, g = 0, b = 0;
-    private boolean reversed = false;
-    char currSel = 'r';
 
     @Override
     public void create() {
@@ -48,15 +49,13 @@ public class GameLogic extends Game {
 
     @Override
     public void render() {
-//        ScreenUtils.clear(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1);
         ScreenUtils.clear(Color.DARK_GRAY);
-//        ScreenUtils.clear(0, 0.75f, 0.75f, 1);
         selectedState.ifPresent(state -> updateLogic.update(state));
         renderLogic.render(selectedState.get());
 
     }
 
-    public Color cycle() {
+    public static Color cycle() {
         if (!reversed) {
             switch (currSel) {
                 case 'r' -> {
@@ -86,8 +85,20 @@ public class GameLogic extends Game {
         return new Color(r, g, b, 1f);
     }
 
-    public Color shiftColour(float r, float g, float b) {
-        return Color.PURPLE;
+    @SuppressWarnings("all")
+    public static String formatNumber(double n, int iteration) {
+        if(n < 1000) {
+            return String.valueOf(Math.round(n));
+        }
+        char[] c = new char[]{'k', 'm', 'b', 't'};
+        double d = ((long) n / 100) / 10.0;
+        boolean isRound = (d * 10) % 10 == 0;
+        return (d < 1000 ?
+                ((d > 99.9 || isRound || (!isRound && d > 9.99) ?
+                        (int) d * 10 / 10 : d + ""
+                ) + "" + c[iteration])
+                : formatNumber(d, iteration + 1));
+
     }
 
     public void setSelectedState(Optional<State> selectedState) {

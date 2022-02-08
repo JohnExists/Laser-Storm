@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import me.johnexists.game1.world.objects.entities.DamageableEntity;
 import me.johnexists.game1.world.objects.entities.Player;
 
+@Deprecated
 public class LaserDEMO extends Laser {
 
     public LaserDEMO(DamageableEntity wielder) {
         super(wielder, null);
         this.laserConst = Player.getLaserSkin();
-//        damagePerSecond = 150;
         damagePerSecond = Float.MAX_VALUE;
 
     }

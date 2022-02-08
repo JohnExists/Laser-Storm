@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
+import me.johnexists.game1.world.effects.DamageDisplayParticle;
 import me.johnexists.game1.world.objects.attributes.Collideable;
 import me.johnexists.game1.world.objects.attributes.Damageable;
 import me.johnexists.game1.world.objects.attributes.Location;
@@ -19,12 +20,14 @@ public abstract class DamageableEntity extends Entity implements Collideable, Da
     protected float scalar;
     protected float health;
     private boolean immortal;
+    protected int bitsValue;
 
     public DamageableEntity(Location location) {
         super(location);
         health = MAX_HEALTH;
         immortal = false;
         scalar = 1;
+        bitsValue = DamageDisplayParticle.BITS_NO_VALUE;
     }
 
     public abstract void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer);
@@ -74,6 +77,9 @@ public abstract class DamageableEntity extends Entity implements Collideable, Da
         return health > 0;
     }
 
+    public int getBitsValue() {
+        return bitsValue;
+    }
     public void setImmortal(boolean immortal) {
         this.immortal = immortal;
     }
@@ -84,7 +90,7 @@ public abstract class DamageableEntity extends Entity implements Collideable, Da
 
     protected void renderHealthBar(ShapeRenderer shapeRenderer) {
         float healthPercentage = Math.min((getHealth() / MAX_HEALTH), 1);
-        float overflowPercentage = Math.min((getHealth() - MAX_HEALTH / MAX_OVERFLOW_HEALTH - MAX_HEALTH), 1);
+        float overflowPercentage = Math.min(((getHealth() - MAX_HEALTH) / (MAX_OVERFLOW_HEALTH - MAX_HEALTH)), 1);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         {

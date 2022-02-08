@@ -9,7 +9,7 @@ public class UpdateLogic {
 
 
     public void update(State state) {
-        float deltaTime = Math.max(Gdx.graphics.getDeltaTime(), UPDATES_PER_SECOND);
+        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), UPDATES_PER_SECOND);
         state.update(deltaTime);
 
     }

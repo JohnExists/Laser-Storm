@@ -50,7 +50,7 @@ public class HealAI implements AITask {
         return host.getNearbyEntities(800 * getYSizeMultiplier(), 800 * getYSizeMultiplier())
                 .stream().filter(gameObject -> gameObject instanceof Enemy)
                 .filter(gameObject -> !(gameObject instanceof EnemyHealer))
-                .limit(10)
+                .limit(5)
                 .collect(Collectors.toList());
     }
 

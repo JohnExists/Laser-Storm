@@ -40,8 +40,8 @@ public class XEnemy extends Enemy {
 
     private float currentRotation = 0;
 
-    public XEnemy(Location location) {
-        super(location);
+    public XEnemy(Location location, float minScalar, float maxScalar) {
+        super(location, minScalar, maxScalar);
         this.size = new Size(45, 45);
         this.extensions = new ArrayList<>();
         enemyType = AGGRESSIVE_NEAR;
@@ -57,12 +57,10 @@ public class XEnemy extends Enemy {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        this.currentTask.update(deltaTime);
         extensions.forEach(xEnemyExtension -> {
             xEnemyExtension.update(deltaTime);
             xEnemyExtension.collidesWith(player, () -> {
                 player.damage(ENTITY_DAMAGE * deltaTime * getScalar());
-                System.out.println(ENTITY_DAMAGE * deltaTime * getScalar());
                 checkIfAlive(player, deltaTime);
             });
         });
@@ -74,9 +72,6 @@ public class XEnemy extends Enemy {
         if (!damageableEntity.isAlive()) {
             getLocation().getWorld().despawn(damageableEntity);
             getLocation().getWorld().spawnParticle(new BloodParticle(damageableEntity.getLocation(), deltaTime));
-            if (damageableEntity instanceof LaserWielder) {
-                ((LaserWielder) damageableEntity).clearLaser();
-            }
         }
     }
 

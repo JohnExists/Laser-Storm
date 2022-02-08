@@ -54,4 +54,10 @@ public class BloodParticle extends Particle {
     public boolean isAvailable() {
         return true;
     }
+
+    @Override
+    public void dispose() {
+        shapeRenderer.dispose();
+        spriteBatch.dispose();
+    }
 }

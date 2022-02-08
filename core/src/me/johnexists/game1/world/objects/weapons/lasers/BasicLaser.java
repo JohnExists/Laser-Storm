@@ -23,7 +23,7 @@ public class BasicLaser extends Laser {
     }
 
     @Override
-    protected void renderLaserBody(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+    public void renderLaserBody(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
         basicLaserBody(spriteBatch, laserConst, degreesOffset);
     }
 

@@ -75,6 +75,10 @@ public abstract class Laser extends GameObject implements Collideable {
                 onCollision(deltaTime, (DamageableEntity) g);
                 checkIfAlive((DamageableEntity) g, deltaTime);
             });
+
+            if (generator.equals(GeneratorConstants.HEALTH_UPSCALAR)) {
+                wielder.overflowHeal(Math.min(50 * deltaTime, 5f * wielder.getScalar() * deltaTime));
+            }
         }
     }
 
@@ -89,14 +93,9 @@ public abstract class Laser extends GameObject implements Collideable {
             knockBackDistance = 130;
         }
 
-        Location locationBetweenOpponents = damageableEntity.getLocation().distanceTo(wielder);
-        Vector2 vectorBetweenOpponents = new Vector2(locationBetweenOpponents.getX(), locationBetweenOpponents.getY());
-        vectorBetweenOpponents.nor();
-        vectorBetweenOpponents.x *= deltaTime * knockBackDistance * -1;
-        vectorBetweenOpponents.y *= deltaTime * knockBackDistance * -1;
-        damageableEntity.getLocation().add(new Location(vectorBetweenOpponents.x, vectorBetweenOpponents.y));
+        damageableEntity.getLocation().moveTowards(wielder, deltaTime * knockBackDistance * -1);
 
-        getLocation().getWorld().spawnParticle(new DamageDisplayParticle(damagePerSecond, damageableEntity, deltaTime));
+        getLocation().getWorld().spawnParticle(new DamageDisplayParticle(damagePerSecond, DamageDisplayParticle.BITS_NO_VALUE, damageableEntity, deltaTime));
 
     }
 
@@ -104,12 +103,12 @@ public abstract class Laser extends GameObject implements Collideable {
         if (!damageableEntity.isAlive()) {
             getLocation().getWorld().despawn(damageableEntity);
             getLocation().getWorld().spawnParticle(new BloodParticle(damageableEntity.getLocation(), deltaTime));
+            getLocation().getWorld().spawnParticle(new DamageDisplayParticle(damagePerSecond, damageableEntity.getBitsValue(), damageableEntity, deltaTime));
+
             wielder.heal(5f);
             if (wielder instanceof Player) {
                 Player.kills += 1;
-            }
-            if (damageableEntity instanceof LaserWielder) {
-                ((LaserWielder) damageableEntity).clearLaser();
+                Player.bits += damageableEntity.getBitsValue();
             }
         }
     }
@@ -163,7 +162,7 @@ public abstract class Laser extends GameObject implements Collideable {
     }
 
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
-        if (isActive) {
+        if (isActive && loc1.getWorld().getMainCharacter().isAlive()) {
             renderLaserBody(spriteBatch, shapeRenderer);
         }
     }

@@ -7,9 +7,9 @@ import me.johnexists.game1.world.objects.attributes.Location;
 public abstract class Particle {
 
     protected float life;
-    protected Location location;
-    protected ShapeRenderer shapeRenderer;
-    protected SpriteBatch spriteBatch;
+    protected final Location location;
+    protected final ShapeRenderer shapeRenderer;
+    protected final SpriteBatch spriteBatch;
     protected float deltaTime;
 
     public Particle(Location location, float deltaTime) {
@@ -22,6 +22,7 @@ public abstract class Particle {
 
     public abstract void continueParticle();
     public abstract boolean isAvailable();
+    public abstract void dispose();
 
     public boolean isRunning() {
         return life > 0;

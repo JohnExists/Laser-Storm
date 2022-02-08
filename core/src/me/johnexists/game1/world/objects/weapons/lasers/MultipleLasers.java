@@ -8,6 +8,7 @@ import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class MultipleLasers extends Laser{
 
     private final List<BasicLaser> basicLasers;

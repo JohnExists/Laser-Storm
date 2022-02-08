@@ -10,6 +10,8 @@ import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
 import me.johnexists.game1.world.objects.weapons.lasers.BasicLaser;
 import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 
+import java.util.Objects;
+
 /*
  * --- Default Enemy ---
  * Ability: Follows the players
@@ -20,12 +22,12 @@ import me.johnexists.game1.world.objects.weapons.lasers.Laser;
  */
 public class DefaultEnemy extends Enemy implements LaserWielder {
 
-    private Laser laser;
+    private final Laser laser;
 
-    public DefaultEnemy(Location location) {
-        super(location);
+    public DefaultEnemy(Location location, float minScalar, float maxScalar) {
+        super(location, minScalar, maxScalar);
         this.laser = new BasicLaser(this, getLocalPlayer(getLocation().getWorld()),
-                GeneratorConstants.values()[MathUtils.random(1, 5)]);
+                GeneratorConstants.values()[MathUtils.random(3, 5)]);
         laser.disable();
         viewingOrderWeight = 3;
         enemyType = AGGRESSIVE_FAR;
@@ -33,8 +35,16 @@ public class DefaultEnemy extends Enemy implements LaserWielder {
 
     }
 
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        updateLaser(deltaTime);
+    }
+
     @Override
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+        renderLaser(spriteBatch, shapeRenderer);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         {
             shapeRenderer.setColor(enemyColour);
@@ -54,7 +64,17 @@ public class DefaultEnemy extends Enemy implements LaserWielder {
     }
 
     @Override
-    public void clearLaser() {
-        laser = null;
+    public void updateLaser(float deltaTime) {
+        if (Objects.nonNull(laser)) {
+            laser.update(deltaTime);
+        }
+    }
+
+    @Override
+    public void renderLaser(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+        if (Objects.nonNull(laser)) {
+            laser.render(spriteBatch, shapeRenderer);
+        }
+
     }
 }

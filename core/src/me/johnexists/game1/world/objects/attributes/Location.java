@@ -1,8 +1,10 @@
 package me.johnexists.game1.world.objects.attributes;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import me.johnexists.game1.world.World;
 import me.johnexists.game1.world.objects.GameObject;
 import me.johnexists.game1.world.objects.entities.Entity;
-import me.johnexists.game1.world.World;
 
 import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
 import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
@@ -44,19 +46,27 @@ public class Location {
         return world;
     }
 
-    public void add(float x, float y) {
-        this.x += x * getXSizeMultiplier();
-        this.y += y * getYSizeMultiplier();
+    private void add(float x, float y) {
+        Location newLocation = preventSurpassingBounds(new Location(this.x + x * getXSizeMultiplier(),
+                this.y + y * getXSizeMultiplier(), world));
+        this.x = newLocation.getX();
+        this.y = newLocation.getY();
     }
 
-    public void add(Location location) {
-        this.x += location.getX() * getXSizeMultiplier();
-        this.y += location.getY() * getYSizeMultiplier();
+    public void moveTowards(GameObject gameObject, float amount) {
+        Location distanceToTarget = distanceTo(gameObject);
+        Vector2 vectorToTarget = new Vector2(distanceToTarget.getX(), distanceToTarget.getY());
+        vectorToTarget.nor();
+        vectorToTarget.x *= amount;
+        vectorToTarget.y *= amount;
+        add(vectorToTarget.x, vectorToTarget.y);
     }
 
     public void add(Velocity velocity) {
-        this.x += velocity.getVector().x * getXSizeMultiplier();
-        this.y += velocity.getVector().y * getYSizeMultiplier();
+        Location newLocation = preventSurpassingBounds(new Location(this.x + velocity.getVector().x * getXSizeMultiplier(),
+                this.y + velocity.getVector().y * getXSizeMultiplier(), world));
+        this.x = newLocation.getX();
+        this.y = newLocation.getY();
     }
 
     public Location distanceTo(GameObject gameObject) {
@@ -66,11 +76,11 @@ public class Location {
 
     }
 
-    public boolean isXGreaterThan(float x) {
-        return Math.abs(this.x) > x * Size.getXSizeMultiplier();
+    public boolean isXLesserThan(float x) {
+        return !(Math.abs(this.x) > x * Size.getXSizeMultiplier());
     }
-    public boolean isYGreaterThan(float y) {
-        return Math.abs(this.y) > y * Size.getYSizeMultiplier();
+    public boolean isYLesserThan(float y) {
+        return !(Math.abs(this.y) > y * Size.getYSizeMultiplier());
     }
 
 
@@ -87,5 +97,10 @@ public class Location {
         Entity circleEntity = (Entity) circleShape;
         return new Location(circleEntity.getLocation().getX() - circleEntity.getSize().getWidth() / 2,
                 circleEntity.getLocation().getY() - circleEntity.getSize().getHeight() / 2);
+    }
+
+    private static Location preventSurpassingBounds(Location location) {
+        return new Location(MathUtils.clamp(location.getX(), 50 * getXSizeMultiplier(),  World.MAP_X - 50 * getXSizeMultiplier()),
+                MathUtils.clamp(location.getY(), 50 * getYSizeMultiplier(), World.MAP_Y - 50 * getYSizeMultiplier()));
     }
 }

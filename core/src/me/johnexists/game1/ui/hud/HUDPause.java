@@ -21,7 +21,7 @@ public class HUDPause extends UIElement {
     private final GlyphLayout glyphLayout;
     private UIButton resumeButton, restartButton, mainMenuButton;
 
-    private GameState gameState;
+    private final GameState gameState;
     private final float WIDTH = Gdx.graphics.getWidth(),
             HEIGHT = Gdx.graphics.getHeight();
 

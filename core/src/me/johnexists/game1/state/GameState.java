@@ -5,14 +5,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import me.johnexists.game1.logic.GameLogic;
-import me.johnexists.game1.world.objects.attributes.Location;
-import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.ui.UIElement;
-import me.johnexists.game1.ui.hud.HUDDeath;
+import me.johnexists.game1.ui.hud.HUDEndScreen;
 import me.johnexists.game1.ui.hud.HUDHealth;
 import me.johnexists.game1.ui.hud.HUDMinimap;
 import me.johnexists.game1.ui.hud.HUDPause;
 import me.johnexists.game1.world.World;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.enemies.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +30,20 @@ public class GameState extends State {
     private final List<UIElement> hudElements;
     private final HUDPause hudPause;
     private final World world;
+    private final int level;
 
-    private boolean paused;
+    private boolean paused, gameEnd;
 
-    public GameState(GameLogic gameLogic) {
+    public GameState(GameLogic gameLogic, int level) {
         super(gameLogic);
+        this.level = level;
         this.world = new World(this);
         createNewWorld();
         hudElements = new ArrayList<>();
         hudPause = new HUDPause(this);
-
         spriteBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
+
         shapeRenderer.setAutoShapeType(true);
         gameCamera = new OrthographicCamera(graphics.getWidth(), graphics.getHeight());
         gameCamera.update();
@@ -48,13 +51,17 @@ public class GameState extends State {
         initHUD();
 
         gameLogic.getKeyInput().registerOnKeyReleased(Input.Keys.ESCAPE,
-                this::togglePause);
+                () -> {
+                    if (!gameEnd) {
+                        togglePause();
+                    }
+                });
     }
 
     public void createNewWorld() {
-        world.getGameObjects().clear();
-        world.loadEntities();
+        world.loadEntities(level);
         paused = false;
+        gameEnd = false;
     }
 
     public void initHUD() {
@@ -68,17 +75,12 @@ public class GameState extends State {
 
     @Override
     public void render() {
+
         gl.glLineWidth(Size.getXSizeMultiplier());
         spriteBatch.setProjectionMatrix(gameCamera.combined);
         shapeRenderer.setProjectionMatrix(gameCamera.combined);
         world.render();
         hudElements.forEach(UIElement::render);
-
-        if (!(world.getMainCharacter().isAlive()) && hudElements.stream()
-                .noneMatch(hudElement -> hudElement instanceof HUDDeath)) {
-            hudElements.clear();
-            hudElements.add(new HUDDeath());
-        }
 
         if (paused) {
             hudPause.render();
@@ -90,7 +92,20 @@ public class GameState extends State {
         if (!paused) {
             if (world.getMainCharacter().isAlive()) {
                 world.update(deltaTime);
-                hudElements.forEach(hudElement -> hudElement.update(deltaTime));
+            }
+            if (!gameEnd) {
+                hudElements.forEach(hud -> hud.update(deltaTime));
+                if (!world.getMainCharacter().isAlive()) {
+                    hudElements.clear();
+                    gameEnd = true;
+                    hudElements.add(new HUDEndScreen(false));
+                }
+                if (world.getGameObjects().stream().noneMatch(obj -> obj instanceof Enemy)) {
+                    hudElements.clear();
+                    gameEnd = true;
+                    hudElements.add(new HUDEndScreen(true));
+                }
+
             } else {
                 gameLogic.getKeyInput().isPressed(Input.Keys.R, () -> {
                     createNewWorld();
@@ -99,6 +114,7 @@ public class GameState extends State {
                 gameLogic.getKeyInput().isPressed(Input.Keys.M, () ->
                         gameLogic.setSelectedState(Optional.of(new MainMenuState(getGameLogic()))));
             }
+
         } else {
             hudPause.update(deltaTime);
         }
@@ -109,6 +125,8 @@ public class GameState extends State {
         spriteBatch.dispose();
         shapeRenderer.dispose();
         hudElements.forEach(UIElement::dispose);
+        world.dispose();
+
     }
 
     public OrthographicCamera getGameCamera() {
@@ -126,5 +144,9 @@ public class GameState extends State {
 
     public void togglePause() {
         paused = !paused;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

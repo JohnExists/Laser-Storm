@@ -18,8 +18,8 @@ import me.johnexists.game1.world.objects.entities.enemies.enemyai.ai.HealAI;
  */
 public class EnemyHealer extends Enemy {
 
-    public EnemyHealer(Location location) {
-        super(location);
+    public EnemyHealer(Location location, float minScalar, float maxScalar) {
+        super(location, minScalar, maxScalar);
         this.size = new Size(125,125);
 
         enemyType = PASSIVE;

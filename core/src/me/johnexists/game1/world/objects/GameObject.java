@@ -43,14 +43,4 @@ public abstract class GameObject {
         return viewingOrderWeight;
     }
 
-    public boolean isA(Class c) {
-//        Class thisClass = getClass();
-//        while (thisClass != null) {
-//            thisClass = thisClass.getSuperclass();
-//        }
-//        assert false;
-//        return thisClass.equals(c);
-        return false;
-    }
-
 }

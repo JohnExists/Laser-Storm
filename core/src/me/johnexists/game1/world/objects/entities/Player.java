@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import me.johnexists.game1.world.objects.abilities.Ability;
-import me.johnexists.game1.world.objects.abilities.AbilityConstants;
-import me.johnexists.game1.world.objects.abilities.Deranger;
-import me.johnexists.game1.world.objects.abilities.Repulsor;
 import me.johnexists.game1.logic.GameLogic;
+import me.johnexists.game1.state.State;
+import me.johnexists.game1.world.objects.abilities.*;
 import me.johnexists.game1.world.objects.attributes.CircleShape;
 import me.johnexists.game1.world.objects.attributes.LaserWielder;
 import me.johnexists.game1.world.objects.attributes.Location;
@@ -17,26 +15,33 @@ import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
 import me.johnexists.game1.world.objects.weapons.lasers.BasicLaser;
 import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
-import me.johnexists.game1.state.State;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
 
+/*
+ * --- Player ---
+ * - Controlled by the keys WASD
+ * - Can use a wide range of abilities
+ * - 100 HP
+ * - Circle Shaped
+ *
+ */
 public class Player extends DamageableEntity implements CircleShape, LaserWielder {
 
-    public static LaserConstants laserSkin = LaserConstants.RAINBOW;
+    public static LaserConstants laserSkin = LaserConstants.RED;
     public static GeneratorConstants laserGenerator = GeneratorConstants.MINI;
-    public static AbilityConstants abilityConstants = AbilityConstants.DERANGER;
-    public static float playerScalar = 115, passiveHealPerSecond = 3.5f;
-    public static int kills = 0;
+    public static AbilityConstants abilityConstants = AbilityConstants.NONE;
+    public static float playerScalar = 1, passiveHealPerSecond = 3.5f;
+    public static int kills = 0, bits = 0;
 
     private final GameLogic gameLogic;
     private final float DISTANCE_PER_SECOND = 405, //255
             RADIUS = ((getSize().getWidth() + getSize().getHeight()) / 2) / 2;
 
-    private Laser laser;
+    private final Laser laser;
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<Ability> currentAbility;
 
@@ -46,8 +51,6 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         this.laser = new BasicLaser(this, 0, Player.laserGenerator);
         this.scalar = playerScalar;
 
-//        health =  MAX_OVERFLOW_HEALTH;
-
         currentAbility = Optional.empty();
         viewingOrderWeight = 5;
 
@@ -55,6 +58,8 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
             if (currentAbility.isEmpty()) {
                 currentAbility = switch (Player.abilityConstants) {
                     case NONE -> Optional.empty();
+                    case TRILASER -> Optional.of(new AdditionalLasers(this, false));
+                    case PENTALASER -> Optional.of(new AdditionalLasers(this, true));
                     case REPULSOR -> Optional.of(new Repulsor(this));
                     case DERANGER -> Optional.of(new Deranger(this));
                 };
@@ -64,7 +69,6 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
     @Override
     public void update(float deltaTime) {
-        System.out.println(getScalar());
         AtomicReference<Boolean> isSprinting = new AtomicReference<>();
         float speed;
 
@@ -94,6 +98,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
         });
         currentAbility.ifPresent(ability -> ability.update(deltaTime));
         super.update(deltaTime);
+        updateLaser(deltaTime);
 
         heal(passiveHealPerSecond * deltaTime);
 
@@ -113,8 +118,8 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
     @Override
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
-//        shapeRenderer.setProjectionMatrix(getLocation().getWorld().getGameState().getGameCamera().combined);
         currentAbility.ifPresent(ability -> ability.render(shapeRenderer, spriteBatch));
+        renderLaser(spriteBatch, shapeRenderer);
         shapeRenderer.begin(Filled);
         {
             shapeRenderer.setColor(Color.BLUE);
@@ -130,8 +135,13 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
     }
 
     @Override
-    public void clearLaser() {
-        laser = null;
+    public void updateLaser(float deltaTime) {
+        laser.update(deltaTime);
+    }
+
+    @Override
+    public void renderLaser(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+        laser.render(spriteBatch, shapeRenderer);
     }
 
     public static LaserConstants getLaserSkin() {

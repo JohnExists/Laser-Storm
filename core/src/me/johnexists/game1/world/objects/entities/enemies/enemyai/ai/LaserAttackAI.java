@@ -10,6 +10,8 @@ import me.johnexists.game1.world.objects.entities.DamageableEntity;
 import me.johnexists.game1.world.objects.entities.Player;
 import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 
+import java.util.Objects;
+
 import static java.lang.Math.abs;
 import static java.util.Objects.*;
 import static me.johnexists.game1.world.objects.entities.enemies.Enemy.*;
@@ -23,7 +25,9 @@ public class LaserAttackAI implements AITask {
         this.host = host;
         this.target = target;
         this.laser = laserWielder.getLaser();
-        laser.enable();
+        if (Objects.nonNull(laser)) {
+            laser.enable();
+        }
     }
 
     @Override

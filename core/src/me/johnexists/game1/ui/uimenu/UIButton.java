@@ -2,13 +2,13 @@ package me.johnexists.game1.ui.uimenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.johnexists.game1.world.objects.attributes.Location;
-import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.state.State;
 import me.johnexists.game1.ui.UIElement;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
 
-@SuppressWarnings("all")
 public class UIButton extends UIElement {
 
     private float scale, width, height;
@@ -16,6 +16,7 @@ public class UIButton extends UIElement {
     private Color color;
     private Runnable onClick;
     private final State workingState;
+
 
     public UIButton(State workingState) {
         super(new Location(0, 0), new Size(0, 0));
@@ -62,7 +63,7 @@ public class UIButton extends UIElement {
         renderText();
     }
 
-    private void renderLineEdge() {
+    protected void renderLineEdge() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         {
             shapeRenderer.rect(location.getX() - size.getWidth() / 2, location.getY() - size.getHeight() / 2,
@@ -71,7 +72,7 @@ public class UIButton extends UIElement {
         shapeRenderer.end();
     }
 
-    private void renderFilledEdge() {
+    protected void renderFilledEdge() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         {
             shapeRenderer.rect(location.getX() - size.getWidth() / 2, location.getY() - size.getHeight() / 2,
@@ -80,7 +81,7 @@ public class UIButton extends UIElement {
         shapeRenderer.end();
     }
 
-    private void renderText() {
+    protected void renderText() {
         spriteBatch.begin();
         {
             font.getData().setScale(Size.getXSizeMultiplier() * 0.75f * scale,
@@ -98,6 +99,7 @@ public class UIButton extends UIElement {
         Location mouseLoc = new Location(Gdx.input.getX(),
                 Gdx.graphics.getHeight() - Gdx.input.getY());
         float width = size.getWidth() / 2, height = size.getHeight() / 2;
+
         return mouseLoc.getX() > this.location.getX() - width &&
                 mouseLoc.getX() < this.location.getX() + width &&
                 mouseLoc.getY() > this.location.getY() - height &&
@@ -114,7 +116,14 @@ public class UIButton extends UIElement {
 
     public void setDisplayText(String displayText) {
         this.displayText = displayText;
-        glyphLayout.setText(font, displayText);
+        glyphLayout.setText(font, this.displayText);
+    }
+
+    public void modifyDisplayText(String displayText) {
+        this.displayText = displayText;
+        glyphLayout.setText(font, this.displayText);
+        glyphLayout.width /= 2;
+        glyphLayout.height /= 2;
     }
 
     public void setColor(Color color) {

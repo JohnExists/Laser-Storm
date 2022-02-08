@@ -5,56 +5,79 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import me.johnexists.game1.world.objects.attributes.Size;
-import me.johnexists.game1.world.objects.GameObject;
 import me.johnexists.game1.world.World;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
 
 import java.text.DecimalFormat;
 
 public class DamageDisplayParticle extends Particle {
 
+    public static final int BITS_NO_VALUE = 0;
+
     private static final float LIFE_EXPECTANCY = 1f;
 
-    private final GameObject gameObject;
+    private final DamageableEntity damageableEntity;
     private final BitmapFont font;
     private final GlyphLayout glyphLayout;
-    private final DecimalFormat df;
-    private final float damage;
+    private final StringBuilder displayText;
+    private final int bits;
 
-    public DamageDisplayParticle(float damage, GameObject gameObject, float deltaTime) {
-        super(gameObject.getLocation(), deltaTime);
-        font = new BitmapFont(Gdx.files.internal("DefaultFont.fnt"));
+    public DamageDisplayParticle(float damage, int bits, DamageableEntity damageableEntity, float deltaTime) {
+        super(damageableEntity.getLocation(), deltaTime);
+
         this.life = LIFE_EXPECTANCY;
-        this.damage = damage;
-        this.gameObject = gameObject;
+        this.bits = bits;
+        this.damageableEntity = damageableEntity;
+
+        font = new BitmapFont(Gdx.files.internal("DefaultFont.fnt"));
         glyphLayout = new GlyphLayout();
-        df = new DecimalFormat("#,###");
+        DecimalFormat df = new DecimalFormat("#,###");
+        displayText = new StringBuilder();
+
+        displayText.append(df.format(damage)).append(" DPS");
+        if (bits != BITS_NO_VALUE) {
+            displayText.append(", +1 Kill, +").append(bits).append(" Bits");
+        }
+
     }
 
     @Override
     public void continueParticle() {
         life -= deltaTime;
-        glyphLayout.setText(font, df.format(damage) + " DPS");
+        glyphLayout.setText(font, displayText.toString());
 
         spriteBatch.begin();
         {
-            font.setColor(Color.RED);
+            Color color = bits != BITS_NO_VALUE ? Color.CYAN : Color.RED;
+
+            font.setColor(color);
             font.getData().setScale(0.5f * Size.getXSizeMultiplier(),
                     0.5f * Size.getYSizeMultiplier());
-            font.draw(spriteBatch, df.format(damage) + " DPS",
-                    gameObject.getLocation().getX(),
-                    gameObject.getLocation().getY() + life);
+
+            if (damageableEntity.isAlive() || bits != BITS_NO_VALUE) {
+                font.draw(spriteBatch, displayText,
+                        damageableEntity.getLocation().getX(),
+                        damageableEntity.getLocation().getY() + (life * Size.getYSizeMultiplier() * 16));
+            }
         }
         spriteBatch.end();
     }
 
     public boolean isAvailable() {
-        World world = getGameObject().getLocation().getWorld();
-        return world.getActiveParticles().stream()
+        World world = getDamageableEntity().getLocation().getWorld();
+        boolean anyDuplicates = world.getActiveParticles().stream()
                 .filter(g -> g instanceof DamageDisplayParticle)
-                .noneMatch(g -> ((DamageDisplayParticle) g).getGameObject().equals(gameObject));
+                .noneMatch(g -> ((DamageDisplayParticle) g).getDamageableEntity().equals(damageableEntity));
+        return anyDuplicates || !damageableEntity.isAlive();
     }
 
-    public GameObject getGameObject() {
-        return gameObject;
+    @Override
+    public void dispose() {
+        shapeRenderer.dispose();
+        spriteBatch.dispose();
+    }
+
+    public DamageableEntity getDamageableEntity() {
+        return damageableEntity;
     }
 }

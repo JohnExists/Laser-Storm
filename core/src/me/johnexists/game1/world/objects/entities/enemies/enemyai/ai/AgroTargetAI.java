@@ -1,11 +1,10 @@
 package me.johnexists.game1.world.objects.entities.enemies.enemyai.ai;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
-import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITask;
-import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITaskHost;
 import me.johnexists.game1.world.objects.GameObject;
 import me.johnexists.game1.world.objects.attributes.Collideable;
 import me.johnexists.game1.world.objects.attributes.LaserWielder;
@@ -13,11 +12,14 @@ import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.world.objects.entities.DamageableEntity;
 import me.johnexists.game1.world.objects.entities.Player;
-import me.johnexists.game1.world.objects.entities.enemies.EnemyPlusPlus;
+import me.johnexists.game1.world.objects.entities.enemies.EnemyPlus;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITask;
+import me.johnexists.game1.world.objects.entities.enemies.enemyai.AITaskHost;
+
+import java.util.Objects;
 
 import static com.badlogic.gdx.math.Intersector.overlapConvexPolygons;
 import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
 import static me.johnexists.game1.world.objects.entities.enemies.Enemy.TARGET_DISTANCE;
 import static me.johnexists.game1.world.objects.entities.enemies.Enemy.getLocalPlayer;
 
@@ -54,19 +56,14 @@ public class AgroTargetAI implements AITask {
         AITaskHost taskHost = (AITaskHost) host;
         Player localPlayer = getLocalPlayer(host.getLocation().getWorld());
         Location distanceToPlayer = nonNull(localPlayer) ?
-                host.getLocation().distanceTo(requireNonNull(localPlayer)) :
+                host.getLocation().distanceTo(Objects.requireNonNull(localPlayer)) :
                 null;
 
         if (nonNull(distanceToPlayer)) {
-            if (!distanceToPlayer.isXGreaterThan(TARGET_DISTANCE) &&
-                    !distanceToPlayer.isYGreaterThan(TARGET_DISTANCE)) {
-                Vector2 hostToTargetVector = new Vector2(distanceToPlayer.getX(), distanceToPlayer.getY());
-                float additionalSpeed = Math.max(host.getScalar() / 5, 25);
+            if (distanceToPlayer.isXLesserThan(TARGET_DISTANCE) &&
+                    distanceToPlayer.isYLesserThan(TARGET_DISTANCE)) {
+                host.getLocation().moveTowards(target, deltaTime * 175f);
 
-                hostToTargetVector.nor();
-                hostToTargetVector.x *= deltaTime * (125 + additionalSpeed); // 125
-                hostToTargetVector.y *= deltaTime * (125 + additionalSpeed); // 125
-                host.getLocation().add(new Location(hostToTargetVector.x, hostToTargetVector.y));
             } else {
                 taskHost.endTask(new StandStillAI(host));
             }
@@ -91,8 +88,8 @@ public class AgroTargetAI implements AITask {
                     taskHost.endTask(new StandStillAI(host));
                     break;
                 case AGGRESSIVE_LAUNCH:
-                    if (taskHost instanceof EnemyPlusPlus) {
-                        ((EnemyPlusPlus) taskHost).launch();
+                    if (taskHost instanceof EnemyPlus) {
+                        ((EnemyPlus) taskHost).launch();
                         taskHost.endTask(new LaserAttackAI(host, target, (LaserWielder) host
                         ));
                     }

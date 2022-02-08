@@ -37,13 +37,7 @@ public class Repulsor extends Ability {
     }
 
     private void ability(DamageableEntity damageableEntity) {
-        Location locationToPlayer = damageableEntity.getLocation().distanceTo(player);
-        Vector2 velocityVector = new Vector2(locationToPlayer.getX(), locationToPlayer.getY());
-        velocityVector.nor();
-        velocityVector.x *= -45;
-        velocityVector.y *= -45;
-
-        damageableEntity.getLocation().add(new Location(velocityVector.x, velocityVector.y));
+        damageableEntity.getLocation().moveTowards(player, -45);
         player.setImmortal(true);
 
     }

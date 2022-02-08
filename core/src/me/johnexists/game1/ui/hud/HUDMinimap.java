@@ -1,16 +1,19 @@
 package me.johnexists.game1.ui.hud;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import me.johnexists.game1.world.objects.attributes.Location;
-import me.johnexists.game1.world.objects.attributes.Size;
-import me.johnexists.game1.world.objects.GameObject;
-import me.johnexists.game1.world.objects.entities.DamageableEntity;
-import me.johnexists.game1.world.objects.entities.enemies.Enemy;
+import com.badlogic.gdx.utils.Align;
+import me.johnexists.game1.logic.GameLogic;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.world.World;
+import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.attributes.Location;
+import me.johnexists.game1.world.objects.attributes.Size;
+import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.entities.Player;
+import me.johnexists.game1.world.objects.entities.enemies.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static com.badlogic.gdx.Gdx.gl;
 import static com.badlogic.gdx.Gdx.graphics;
+import static com.badlogic.gdx.graphics.GL20.*;
 import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultiplier;
 import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultiplier;
 
@@ -66,16 +70,34 @@ public class HUDMinimap extends UIElement {
     public void render() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         {
-            graphics.getGL20().glEnable(GL20.GL_BLEND);
-            gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            shapeRenderer.setColor(new Color(0,0,0,0.45f));
+            graphics.getGL20().glEnable(GL_BLEND);
+            gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.setColor(new Color(0, 0, 0, 0.45f));
             shapeRenderer.rect(location.getX(), location.getY(),
                     size.getWidth(), size.getHeight());
             renderPoints();
         }
         shapeRenderer.end();
-        gl.glDisable(GL20.GL_BLEND);
+        gl.glDisable(GL_BLEND);
+        renderInfoText();
     }
+
+    private void renderInfoText() {
+        String text = String.format(" Your Kills -> %d\n Enemies Left -> %d\n Your Bits -> %s", Player.kills,
+                world.getGameObjects().size() - 1, GameLogic.formatNumber(Player.bits, 0));
+        GlyphLayout g = new GlyphLayout();
+        g.setText(font, text,
+                Color.WHITE, graphics.getWidth(), Align.center, true);
+
+        font.getData().setScale(Size.getXSizeMultiplier() / 4f);
+        spriteBatch.begin();
+        {
+            font.draw(spriteBatch, text, location.getX(), location.getY() - (g.height * (Size.getXSizeMultiplier() / 4f) / 2));
+        }
+        spriteBatch.end();
+    }
+
+
 
     private void renderPoints() {
         objects.forEach(ob -> {

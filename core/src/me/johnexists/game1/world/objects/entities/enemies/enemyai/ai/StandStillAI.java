@@ -31,8 +31,8 @@ public class StandStillAI implements AITask {
                 null;
 
         if (nonNull(distanceToPlayer)) {
-            if (!distanceToPlayer.isXGreaterThan(TARGET_DISTANCE) &&
-                    !distanceToPlayer.isYGreaterThan(TARGET_DISTANCE)) {
+            if (distanceToPlayer.isXLesserThan(TARGET_DISTANCE) &&
+                    distanceToPlayer.isYLesserThan(TARGET_DISTANCE)) {
                 Size enemyRange = switch (taskHost.getEnemyType()) {
                     case PASSIVE, AGGRESSIVE_FAR, AGGRESSIVE_LAUNCH -> new Size(MathUtils.random(100, 175), MathUtils.random(100, 175));
                     case AGGRESSIVE_NEAR -> new Size(45, 45);

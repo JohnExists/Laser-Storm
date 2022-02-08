@@ -9,14 +9,14 @@ import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TriLaser extends Ability {
+public class AdditionalLasers extends Ability {
 
     private final MultipleLasers multipleLasers;
     private final Player player;
 
-    public TriLaser(Player player) {
+    public AdditionalLasers(Player player, boolean isPenta) {
         this.player = player;
-        multipleLasers = new MultipleLasers();
+        multipleLasers = new MultipleLasers(isPenta);
         ticksLeft = 29f;
     }
 
@@ -34,12 +34,20 @@ public class TriLaser extends Ability {
 
         private final List<BasicLaser> basicLasers;
 
-        public MultipleLasers() {
+        public MultipleLasers(boolean isPenta) {
             super(player, Player.laserGenerator);
             basicLasers = new ArrayList<>();
 
-            basicLasers.add(new BasicLaser(wielder, -9f, Player.laserGenerator));
-            basicLasers.add(new BasicLaser(wielder, 9f, Player.laserGenerator));
+            if (isPenta) {
+                for (int i = -2; i < 3; i++) {
+                    if (i != 0) {
+                        basicLasers.add(new BasicLaser(wielder, i * 9, Player.laserGenerator));
+                    }
+                }
+            } else {
+                basicLasers.add(new BasicLaser(wielder, -9f, Player.laserGenerator));
+                basicLasers.add(new BasicLaser(wielder, 9f, Player.laserGenerator));
+            }
         }
 
         @Override

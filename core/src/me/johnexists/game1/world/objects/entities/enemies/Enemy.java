@@ -23,14 +23,13 @@ public abstract class Enemy extends DamageableEntity implements AITaskHost {
     protected Color enemyColour;
     public static float TARGET_DISTANCE;
 
-    public Enemy(Location location) {
+    public Enemy(Location location, float minScalar, float maxScalar) {
         super(location);
         currentTask = new StandStillAI(this);
-        TARGET_DISTANCE = 750 * Size.getXSizeMultiplier();
-//        scalar = MathUtils.random(45,100);
-        scalar = MathUtils.random(1,5);
-
-//        health = MAX_OVERFLOW_HEALTH;
+        TARGET_DISTANCE = 450 * Size.getXSizeMultiplier();
+        scalar = MathUtils.random(minScalar, maxScalar);
+        bitsValue = Math.round(scalar * 17);
+        health = Math.min(MAX_HEALTH + ((location.getWorld().getGameState().getLevel() - 1) * 60), MAX_OVERFLOW_HEALTH);
     }
 
     @Override
@@ -61,4 +60,6 @@ public abstract class Enemy extends DamageableEntity implements AITaskHost {
     public Color getEnemyColour() {
         return enemyColour;
     }
+
+
 }

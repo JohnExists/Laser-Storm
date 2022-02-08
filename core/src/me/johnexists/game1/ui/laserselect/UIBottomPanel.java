@@ -10,7 +10,7 @@ import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.world.objects.entities.Player;
 import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
-import me.johnexists.game1.state.LaserSelectState;
+import me.johnexists.game1.state.UpgradeSelectState;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.ui.uimenu.UIButton;
 
@@ -23,12 +23,12 @@ import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultipli
 @Deprecated
 public class UIBottomPanel extends UIElement {
 
-    private final LaserSelectState laserSelectState;
+    private final UpgradeSelectState upgradeSelectState;
     private final List<UIButton> uiElements;
 
-    public UIBottomPanel(LaserSelectState laserSelectState) {
+    public UIBottomPanel(UpgradeSelectState upgradeSelectState) {
         super(new Location(0, 0), new Size(0, 0));
-        this.laserSelectState = laserSelectState;
+        this.upgradeSelectState = upgradeSelectState;
         uiElements = new ArrayList<>();
 
         for (int i = 1; i < 7; i++) {
@@ -58,7 +58,7 @@ public class UIBottomPanel extends UIElement {
         final GlyphLayout glyphLayout;
 
         public SelectAbilityButton(int index) {
-            super(laserSelectState);
+            super(upgradeSelectState);
             setColor(Color.WHITE);
             setLocation(calculateLocationRelativeToIndex(index - 1));
             setOnClick(() -> Player.swapLaserGenerator(GeneratorConstants.values()[index]));

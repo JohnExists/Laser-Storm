@@ -1,20 +1,18 @@
 package me.johnexists.game1.world;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.crashinvaders.vfx.VfxManager;
+import com.crashinvaders.vfx.effects.BloomEffect;
+import me.johnexists.game1.logic.GameLogic;
+import me.johnexists.game1.state.GameState;
 import me.johnexists.game1.world.effects.Particle;
 import me.johnexists.game1.world.objects.GameObject;
-import me.johnexists.game1.world.objects.attributes.LaserWielder;
 import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.world.objects.entities.DamageableEntity;
-import me.johnexists.game1.world.objects.entities.Player;
-import me.johnexists.game1.world.objects.entities.enemies.DefaultEnemy;
-import me.johnexists.game1.world.objects.entities.enemies.EnemyHealer;
-import me.johnexists.game1.world.objects.entities.enemies.EnemyPlusPlus;
-import me.johnexists.game1.world.objects.entities.enemies.XEnemy;
-import me.johnexists.game1.state.GameState;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,58 +24,46 @@ import static me.johnexists.game1.world.objects.attributes.Size.getXSizeMultipli
 
 public class World {
 
-    public static final float MAP_X = 8500 * Size.getYSizeMultiplier(),
-            MAP_Y = 8500 * Size.getYSizeMultiplier();
+    public static final float MAP_X = 6500 * Size.getXSizeMultiplier(),
+            MAP_Y = 6500 * Size.getYSizeMultiplier();
+
     private final List<GameObject> gameObjects;
     private final List<Particle> activeParticles;
     private final GameState gameState;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private Player player;
     private DamageableEntity mainCharacter;
+    private VfxManager vfxManager;
 
     public World(GameState gameState) {
         this.gameState = gameState;
         gameObjects = new ArrayList<>();
         activeParticles = new ArrayList<>();
-        loadEntities();
-//        mainCharacter.setImmortal(true);
-
+        loadGraphics();
         sortList();
     }
 
-    public void loadEntities() {
-        activeParticles.clear();
-        gameObjects.clear();
-        mainCharacter = null;
-        player = new Player(gameState, new Location(1000, 1000, this));
-        mainCharacter = player;
-        spawn(player);
-        for (int i = 0; i < 25; i++) {
-            spawn(new DefaultEnemy(getRandomLocation()));
-            spawn(new XEnemy(getRandomLocation()));
-            spawn(new EnemyPlusPlus(getRandomLocation()));
-        }
-        for (int i = 0; i < 6; i++) {
-            spawn(new EnemyHealer(getRandomLocation()));
-        }
+    private void loadGraphics() {
+        vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
+        BloomEffect vfxEffect = new BloomEffect();
+        vfxManager.addEffect(vfxEffect);
+        vfxEffect.setBloomIntensity(2.5f);
+    }
+
+
+    public void loadEntities(int level) {
+        SpawnConfigurations.loadPreConfigurations(this);
+        SpawnConfigurations spawnConfig = SpawnConfigurations.generateConfigurationByLevel(this, level);
+        spawnConfig.spawn();
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
     public void update(float deltaTime) {
+        vfxManager.update(deltaTime);
         synchronizeCameraWith(mainCharacter);
         sortList();
 
-        try {
-            if (!gameObjects.isEmpty()) {
-                for (int i = 0; i < gameObjects.size(); i++) {
-                    gameObjects.get(i).update(deltaTime);
-                    if (gameObjects.get(i) instanceof LaserWielder) {
-                        ((LaserWielder) gameObjects.get(i)).getLaser().update(deltaTime);
-                    }
-                }
-            }
-        } catch (IndexOutOfBoundsException ignored) {
+        for (int i = 0; i < gameObjects.size(); i++) {
+            gameObjects.get(i).update(deltaTime);
         }
 
     }
@@ -86,37 +72,40 @@ public class World {
     public void render() {
         SpriteBatch spriteBatch = getGameState().getSpriteBatch();
         ShapeRenderer shapeRenderer = getGameState().getShapeRenderer();
-        renderGrid();
 
-        for (int i = 0; i < gameObjects.size(); i++) {
-            Location distanceToMainCharacter = gameObjects.get(i).getLocation().distanceTo(mainCharacter);
-            boolean isWithinBounds = !distanceToMainCharacter.isXGreaterThan(graphics.getWidth()) &&
-                    !distanceToMainCharacter.isYGreaterThan(graphics.getHeight());
+        vfxManager.cleanUpBuffers();
+        vfxManager.beginInputCapture();
+        {
+            renderGrid();
+            for (int i = 0; i < gameObjects.size(); i++) {
+                Location distanceToMainCharacter = gameObjects.get(i).getLocation().distanceTo(mainCharacter);
+                boolean isWithinBounds = distanceToMainCharacter.isXLesserThan(graphics.getWidth()) &&
+                        distanceToMainCharacter.isYLesserThan(graphics.getHeight());
 
-            if (isWithinBounds) {
-                if (gameObjects.get(i) instanceof LaserWielder) {
-                    ((LaserWielder) gameObjects.get(i)).getLaser().render(spriteBatch, shapeRenderer);
+                if (isWithinBounds) {
+                    gameObjects.get(i).render(spriteBatch, shapeRenderer);
                 }
-                gameObjects.get(i).render(spriteBatch, shapeRenderer);
+            }
+
+            for (int i = 0; i < activeParticles.size(); i++) {
+                activeParticles.get(i).continueParticle();
+                if (!activeParticles.get(i).isRunning()) {
+                    activeParticles.remove(activeParticles.get(i));
+                }
             }
         }
-
-        for (int i = 0; i < activeParticles.size(); i++) {
-            activeParticles.get(i).continueParticle();
-            if (!activeParticles.get(i).isRunning()) {
-                activeParticles.remove(activeParticles.get(i));
-            }
-        }
-
+        vfxManager.endInputCapture();
+        vfxManager.applyEffects();
+        vfxManager.renderToScreen();
     }
 
     public void renderGrid() {
         final float GAP = 50 * getXSizeMultiplier();
-        final ShapeRenderer shapeRenderer = getGameState().getShapeRenderer();
+        ShapeRenderer shapeRenderer = getGameState().getShapeRenderer();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.begin();
         {
-            shapeRenderer.setColor(getGameState().getGameLogic().cycle());
+            shapeRenderer.setColor(GameLogic.cycle());
             gl.glLineWidth(getXSizeMultiplier());
             for (int i = 0; i < MAP_X; i += GAP) {
                 shapeRenderer.line(0, i, MAP_X, i);
@@ -126,6 +115,7 @@ public class World {
             }
         }
         shapeRenderer.end();
+
     }
 
     public void spawn(GameObject gameObject) {
@@ -163,6 +153,11 @@ public class World {
         return mainCharacter;
     }
 
+
+    public void setMainCharacter(DamageableEntity mainCharacter) {
+        this.mainCharacter = mainCharacter;
+    }
+
     public Location getRandomLocation() {
         return new Location(MathUtils.random(MAP_X),
                 MathUtils.random(MAP_Y), this);
@@ -176,5 +171,9 @@ public class World {
 
         gameState.getGameCamera().position.set(x, y, 0);
         gameState.getGameCamera().update();
+    }
+
+    public void dispose() {
+
     }
 }

@@ -8,7 +8,7 @@ import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.world.objects.entities.Player;
 import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
-import me.johnexists.game1.state.LaserSelectState;
+import me.johnexists.game1.state.UpgradeSelectState;
 import me.johnexists.game1.ui.UIElement;
 import me.johnexists.game1.ui.uimenu.UIButton;
 
@@ -22,12 +22,12 @@ import static me.johnexists.game1.world.objects.attributes.Size.getYSizeMultipli
 @Deprecated
 public class UITopPanelElement extends UIElement {
 
-    private final LaserSelectState laserSelectState;
+    private final UpgradeSelectState upgradeSelectState;
     private final List<UIButton> uiElements;
 
-    public UITopPanelElement(LaserSelectState laserSelectState) {
+    public UITopPanelElement(UpgradeSelectState upgradeSelectState) {
         super(new Location(0, 0), new Size(0, 0));
-        this.laserSelectState = laserSelectState;
+        this.upgradeSelectState = upgradeSelectState;
         uiElements = new ArrayList<>();
 
         for (int i = 1; i < 12; i++) {
@@ -40,7 +40,7 @@ public class UITopPanelElement extends UIElement {
         uiElements.forEach(ui -> ui.update(deltaTime));
         if (uiElements.stream().filter(ui -> ui instanceof SelectLaserButton)
                 .noneMatch(UIButton::locationIsWithinBounds)) {
-            laserSelectState.setSelectedLaser(laserSelectState.getDefaultLaser());
+            upgradeSelectState.setSelectedLaser(upgradeSelectState.getDefaultLaser());
         }
     }
 
@@ -61,7 +61,7 @@ public class UITopPanelElement extends UIElement {
         final int index;
 
         public SelectLaserButton(int index) {
-            super(laserSelectState);
+            super(upgradeSelectState);
             setColor(Color.WHITE);
             setLocation(calculateLocationRelativeToIndex(index - 1));
             setOnClick(() -> Player.swapLaserSkin(LaserConstants.values()[index]));
@@ -72,7 +72,7 @@ public class UITopPanelElement extends UIElement {
         @Override
         public void update(float deltaTime) {
             if (locationIsWithinBounds()) {
-                laserSelectState.setSelectedLaser(LaserConstants.values()[index]);
+                upgradeSelectState.setSelectedLaser(LaserConstants.values()[index]);
             }
         }
 

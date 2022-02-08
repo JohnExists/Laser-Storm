@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import me.johnexists.game1.world.objects.attributes.LaserWielder;
 import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
@@ -14,11 +13,11 @@ import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
 import me.johnexists.game1.world.objects.weapons.lasers.BasicLaser;
 import me.johnexists.game1.world.objects.weapons.lasers.Laser;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled;
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line;
-import static java.util.Objects.nonNull;
 import static java.util.Optional.empty;
 
 /*
@@ -33,18 +32,18 @@ import static java.util.Optional.empty;
  */
 
 @SuppressWarnings("all")
-public class EnemyPlusPlus extends Enemy implements LaserWielder {
+public class EnemyPlus extends Enemy implements LaserWielder {
 
     private final float GAP = 12 * Size.getXSizeMultiplier();
-    protected Optional<BulletPlusPlus> currentBullet;
+    protected Optional<BulletPlus> currentBullet;
     private Laser laser;
 
-    public EnemyPlusPlus(Location location, float minScalar, float maxScalar) {
+    public EnemyPlus(Location location, float minScalar, float maxScalar) {
         super(location, minScalar, maxScalar);
         this.size = new Size(65, 65);
         this.enemyColour = new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1);
         this.laser = new BasicLaser(this, getLocalPlayer(getLocation().getWorld()),
-                GeneratorConstants.values()[MathUtils.random(4, 5)]);
+                GeneratorConstants.values()[MathUtils.random(3, 5)]);
         laser.disable();
         currentBullet = empty();
         enemyType = AGGRESSIVE_LAUNCH;
@@ -53,12 +52,14 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        currentBullet.ifPresent(bulletPlusPlus ->
-                bulletPlusPlus.update(deltaTime));
+        currentBullet.ifPresent(bulletPlus ->
+                bulletPlus.update(deltaTime));
+        updateLaser(deltaTime);
     }
 
     @Override
     public void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+        renderLaser(spriteBatch, shapeRenderer);
         shapeRenderer.begin(Line);
         {
             shapeRenderer.setColor(enemyColour);
@@ -75,22 +76,23 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
         shapeRenderer.end();
 
         renderHealthBar(shapeRenderer);
-        currentBullet.ifPresent(bulletPlusPlus ->
-                bulletPlusPlus.render(spriteBatch, shapeRenderer));
+        currentBullet.ifPresent(bulletPlus ->
+                bulletPlus.render(spriteBatch, shapeRenderer));
     }
 
     public void launch() {
         if (currentBullet.isEmpty()) {
-            Location bulletLoc = new Location(location.getX(), location.getY(), location.getWorld());
-            bulletLoc.add(size.getWidth() / 2, size.getHeight() / 2);
+            Location bulletLoc = new Location(location.getX() + size.getWidth() / 2,
+                    location.getY() + size.getHeight() / 2,
+                    location.getWorld());
 
-            currentBullet = Optional.of(new BulletPlusPlus(bulletLoc, getLocalPlayer(location.getWorld())));
+            currentBullet = Optional.of(new BulletPlus(bulletLoc, getLocalPlayer(location.getWorld())));
         }
     }
 
     public void wipeBullet() {
-        currentBullet.ifPresent(bulletPlusPlus ->
-                location.getWorld().despawn(bulletPlusPlus));
+        currentBullet.ifPresent(bulletPlus ->
+                location.getWorld().despawn(bulletPlus));
         currentBullet = empty();
     }
 
@@ -100,15 +102,24 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
     }
 
     @Override
-    public void clearLaser() {
-        laser = null;
+    public void updateLaser(float deltaTime) {
+        if (Objects.nonNull(laser)) {
+            laser.update(deltaTime);
+        }
     }
 
-    private class BulletPlusPlus extends DamageableEntity {
+    @Override
+    public void renderLaser(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+        if (Objects.nonNull(laser)) {
+            laser.render(spriteBatch, shapeRenderer);
+        }
+    }
+
+    private class BulletPlus extends DamageableEntity {
 
         Player localPlayer;
 
-        public BulletPlusPlus(Location location, Player localPlayer) {
+        public BulletPlus(Location location, Player localPlayer) {
             super(location);
             this.localPlayer = localPlayer;
             this.size = new Size(15, 15);
@@ -117,17 +128,10 @@ public class EnemyPlusPlus extends Enemy implements LaserWielder {
 
         @Override
         public void update(float deltaTime) {
-            if (nonNull(localPlayer)) {
-                Location distanceToPlayer = location.distanceTo(localPlayer);
-                Vector2 vectorToPlayer = new Vector2(distanceToPlayer.getX(), distanceToPlayer.getY());
-                vectorToPlayer.nor();
-                vectorToPlayer.x *= deltaTime * 200;
-                vectorToPlayer.y *= deltaTime * 200;
-
-                location.add(vectorToPlayer.x, vectorToPlayer.y);
-
+            if (Objects.nonNull(localPlayer)) {
+                location.moveTowards(localPlayer, deltaTime * 200);
                 collidesWith(localPlayer, () -> {
-                    localPlayer.damage(75);
+                    localPlayer.damage(75 * scalar);
                     if (!localPlayer.isAlive()) {
                         location.getWorld().despawn(localPlayer);
                     }
