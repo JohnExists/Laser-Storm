@@ -22,14 +22,12 @@ public class SelectLevelState extends State {
 
     private final List<UIElement> uiElements;
     private final ShapeRenderer shapeRenderer;
-    private final GameLogic gameLogic;
 
     public SelectLevelState(GameLogic gameLogic) {
         super(gameLogic);
         uiElements = new ArrayList<>();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
-        this.gameLogic = gameLogic;
         List<SelectButton> selectButtons = new ArrayList<>();
 
         for (int i = 0; i < 9; i++) {
@@ -60,7 +58,7 @@ public class SelectLevelState extends State {
 
         shapeRenderer.begin();
         {
-            shapeRenderer.setColor(gameLogic.cycle());
+            shapeRenderer.setColor(GameLogic.cycle());
             gl.glLineWidth(getXSizeMultiplier());
             for (int i = 0; i < graphics.getHeight(); i += GAP) {
                 shapeRenderer.line(0, i, graphics.getWidth(), i);
@@ -92,7 +90,10 @@ public class SelectLevelState extends State {
             setDisplayText(String.valueOf(level));
             setScale(getXSizeMultiplier());
             setColor(Color.GRAY);
-            setOnClick(() -> workingState.getGameLogic().setSelectedState(Optional.of(new GameState(workingState.getGameLogic(), level))));
+            setOnClick(() -> {
+                System.gc();
+                workingState.getGameLogic().setSelectedState(Optional.of(new GameState(workingState.getGameLogic(), level)));
+            });
         }
 
         @Override

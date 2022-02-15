@@ -29,9 +29,9 @@ public class GameState extends State {
     private final ShapeRenderer shapeRenderer;
     private final List<UIElement> hudElements;
     private final HUDPause hudPause;
-    private final World world;
     private final int level;
 
+    private final World world;
     private boolean paused, gameEnd;
 
     public GameState(GameLogic gameLogic, int level) {
@@ -62,6 +62,7 @@ public class GameState extends State {
         world.loadEntities(level);
         paused = false;
         gameEnd = false;
+
     }
 
     public void initHUD() {
@@ -108,6 +109,7 @@ public class GameState extends State {
 
             } else {
                 gameLogic.getKeyInput().isPressed(Input.Keys.R, () -> {
+                    System.gc();
                     createNewWorld();
                     initHUD();
                 });
@@ -148,5 +150,9 @@ public class GameState extends State {
 
     public int getLevel() {
         return level;
+    }
+
+    public boolean didGameEnd() {
+        return gameEnd;
     }
 }

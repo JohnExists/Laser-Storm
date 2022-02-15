@@ -35,10 +35,10 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
     public static GeneratorConstants laserGenerator = GeneratorConstants.MINI;
     public static AbilityConstants abilityConstants = AbilityConstants.NONE;
     public static float playerScalar = 1, passiveHealPerSecond = 3.5f;
-    public static int kills = 0, bits = 0;
+    public static int kills = 0, bits = Integer.MAX_VALUE;
 
     private final GameLogic gameLogic;
-    private final float DISTANCE_PER_SECOND = 405, //255
+    private final float DISTANCE_PER_SECOND = 495, //255
             RADIUS = ((getSize().getWidth() + getSize().getHeight()) / 2) / 2;
 
     private final Laser laser;
@@ -53,6 +53,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
         currentAbility = Optional.empty();
         viewingOrderWeight = 5;
+
 
         gameLogic.getKeyInput().registerOnKeyReleased(Input.Keys.Q, () -> {
             if (currentAbility.isEmpty()) {
@@ -129,6 +130,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
     }
 
+
     @Override
     public Laser getLaser() {
         return laser;
@@ -181,5 +183,7 @@ public class Player extends DamageableEntity implements CircleShape, LaserWielde
 
         }
     }
+
+
 
 }

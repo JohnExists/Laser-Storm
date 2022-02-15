@@ -75,6 +75,7 @@ public class DamageDisplayParticle extends Particle {
     public void dispose() {
         shapeRenderer.dispose();
         spriteBatch.dispose();
+        font.dispose();
     }
 
     public DamageableEntity getDamageableEntity() {

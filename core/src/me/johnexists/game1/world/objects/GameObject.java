@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 
+import java.util.Objects;
+
 
 public abstract class GameObject {
 
@@ -21,6 +23,11 @@ public abstract class GameObject {
     public abstract void update(float deltaTime);
 
     public abstract void render(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer);
+    public void dispose() {
+        if(Objects.nonNull(location.getWorld())) {
+            location.getWorld().getGameState().dispose();
+        }
+    }
 
     public Location getLocation() {
         return location;

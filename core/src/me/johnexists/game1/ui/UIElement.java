@@ -33,7 +33,7 @@ public abstract class UIElement {
     public void dispose() {
         shapeRenderer.dispose();
         spriteBatch.dispose();
-
+        font.dispose();
     }
 
     public GlyphLayout getGlyphLayout() {

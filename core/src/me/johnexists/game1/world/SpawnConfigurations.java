@@ -37,7 +37,6 @@ public class SpawnConfigurations {
                     availableEnemies.add(new XEnemy(world.getRandomLocation(), minScalar, maxScalar));
                 }
                 availableEnemies.add(new DefaultEnemy(world.getRandomLocation(), minScalar, maxScalar));
-
                 rand.add(availableEnemies.get(MathUtils.random.nextInt(availableEnemies.size())));
             }
             return new SpawnConfigurations(world, rand);
@@ -46,7 +45,7 @@ public class SpawnConfigurations {
     }
 
     public static SpawnConfigurations generateConfigurationByLevel(World world, int level) {
-        return returnRandomConfig(world, 45 + (level * 5), 2.5f + (level * 5), 10 + (level * 5));
+        return returnRandomConfig(world, 45 + (level * 5), 2.5f + (level * 3.5f), 10 + (level * 3.5f));
     }
 
     public void spawn() {

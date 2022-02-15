@@ -53,6 +53,7 @@ public class HUDPause extends UIElement {
         restartButton.setLocation(new Location(WIDTH / 2, HEIGHT / 2 - 225));
         restartButton.setDisplayText("Restart");
         restartButton.setOnClick(() -> {
+            System.gc();
             gameState.createNewWorld();
             gameState.initHUD();
         });

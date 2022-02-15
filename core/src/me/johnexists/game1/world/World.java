@@ -10,9 +10,12 @@ import me.johnexists.game1.logic.GameLogic;
 import me.johnexists.game1.state.GameState;
 import me.johnexists.game1.world.effects.Particle;
 import me.johnexists.game1.world.objects.GameObject;
+import me.johnexists.game1.world.objects.abilities.AbilityConstants;
 import me.johnexists.game1.world.objects.attributes.Location;
 import me.johnexists.game1.world.objects.attributes.Size;
 import me.johnexists.game1.world.objects.entities.DamageableEntity;
+import me.johnexists.game1.world.objects.weapons.generators.GeneratorConstants;
+import me.johnexists.game1.world.objects.weapons.lasers.LaserConstants;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,6 +36,7 @@ public class World {
 
     private DamageableEntity mainCharacter;
     private VfxManager vfxManager;
+    private BloomEffect vfxEffect;
 
     public World(GameState gameState) {
         this.gameState = gameState;
@@ -44,7 +48,7 @@ public class World {
 
     private void loadGraphics() {
         vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
-        BloomEffect vfxEffect = new BloomEffect();
+        vfxEffect = new BloomEffect();
         vfxManager.addEffect(vfxEffect);
         vfxEffect.setBloomIntensity(2.5f);
     }
@@ -164,16 +168,30 @@ public class World {
     }
 
     public void synchronizeCameraWith(GameObject gameObject) {
-        Location obLoc = gameObject.getLocation();
-        float width = graphics.getWidth() / 2f, height = graphics.getHeight() / 2f;
-        float x = MathUtils.clamp(obLoc.getX(), width, MAP_X - width),
-                y = MathUtils.clamp(obLoc.getY(), height, MAP_Y - height);
+        if (!gameState.didGameEnd()) {
+            Location obLoc = gameObject.getLocation();
+            float width = graphics.getWidth() / 2f, height = graphics.getHeight() / 2f;
+            float x = MathUtils.clamp(obLoc.getX(), width, MAP_X - width),
+                    y = MathUtils.clamp(obLoc.getY(), height, MAP_Y - height);
 
-        gameState.getGameCamera().position.set(x, y, 0);
-        gameState.getGameCamera().update();
+            gameState.getGameCamera().position.set(x, y, 0);
+            gameState.getGameCamera().update();
+        }
     }
 
     public void dispose() {
-
+        activeParticles.forEach(Particle::dispose);
+        gameObjects.forEach(GameObject::dispose);
+        vfxManager.dispose();
+        vfxEffect.dispose();
+        for (int i = 0; i < LaserConstants.values().length; i++) {
+            LaserConstants.values()[i].dispose();
+        }
+        for (int i = 0; i < GeneratorConstants.values().length; i++) {
+            GeneratorConstants.values()[i].dispose();
+        }
+        for (int i = 0; i < AbilityConstants.values().length; i++) {
+            AbilityConstants.values()[i].dispose();
+        }
     }
 }
